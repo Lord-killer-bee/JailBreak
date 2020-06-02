@@ -93,8 +93,21 @@ public class PatrollingEnemy : MonoBehaviour
         return waypoints;
     }
 
+    public float GetMoveSpeed()
+    {
+        return moveSpeed;
+    }
+
     public float GetDetectionTileRange()
     {
         return detectionTileRange;
     }
+}
+
+[System.Serializable]
+public class PatrollingEnemyDataUnit
+{
+    public Vector3[] waypoints;
+    public float moveSpeed;
+    public float detectionTileRange;
 }

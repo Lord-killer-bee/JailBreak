@@ -106,10 +106,24 @@ public class SecurityCamera : MonoBehaviour
         return cameraPatrolAngle;
     }
 
+    public float GetCameraPatrolSpeed()
+    {
+        return cameraPatrolSpeed;
+    }
+
     public Transform GetCamImageTransform()
     {
         return camImage.transform;
     }
 
     #endregion
+}
+
+[System.Serializable]
+public class SecurityCamDataUnit
+{
+    public float detectionArcRadius;
+    public float detectionArcAngle;
+    public float cameraPatrolAngle;
+    public float cameraPatrolSpeed;
 }

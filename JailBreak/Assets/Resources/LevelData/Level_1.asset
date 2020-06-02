@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978301cc465c0f44cb6692eec9f7c1e2, type: 3}
+  m_Name: Level_1
+  m_EditorClassIdentifier: 
+  rowCount: 7
+  columnCount: 8
+  startTileID: 1
+  endTileID: 5
+  wallTileIds: 0100000002000000
+  securityCamsdata:
+  - detectionArcRadius: 3
+    detectionArcAngle: 30
+    cameraPatrolAngle: 120
+    cameraPatrolSpeed: 0.5
+  - detectionArcRadius: 3
+    detectionArcAngle: 30
+    cameraPatrolAngle: 120
+    cameraPatrolSpeed: 0.5
+  lasersdata:
+  - laserEnds:
+    - {x: -1.9, y: -2.97, z: 0}
+    - {x: 3.27, y: -0.73, z: 0}
+  - laserEnds:
+    - {x: -1.9, y: -2.97, z: 0}
+    - {x: 3.27, y: -0.73, z: 0}
+  patrollersdata:
+  - waypoints:
+    - {x: -11.907719, y: 1.9606758, z: 0}
+    - {x: -10.392274, y: 5.2017536, z: 0}
+    - {x: -7.504974, y: 6.2237267, z: 0}
+    - {x: -2.6970441, y: 6.519325, z: 0}
+    - {x: -1.510315, y: 0.5162606, z: 0}
+    moveSpeed: 3
+    detectionTileRange: 3
+  - waypoints:
+    - {x: -11.907719, y: 1.9606758, z: 0}
+    - {x: -10.392274, y: 5.2017536, z: 0}
+    - {x: -7.504974, y: 6.2237267, z: 0}
+    - {x: -2.6970441, y: 6.519325, z: 0}
+    - {x: -1.510315, y: 0.5162606, z: 0}
+    moveSpeed: 3
+    detectionTileRange: 3

@@ -29,3 +29,9 @@ public class EnemyLaser : MonoBehaviour
         return laserEndPositions;
     }
 }
+
+[System.Serializable]
+public class EnemyLaserDataUnit
+{
+    public Vector3[] laserEnds;
+}
