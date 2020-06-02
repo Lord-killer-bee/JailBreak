@@ -60,7 +60,9 @@ public class LevelManager : MonoBehaviour
             tile.transform.localScale = Vector3.one;
             tile.transform.localRotation = Quaternion.identity;
 
-            tile.GetComponent<Tile>().tileID = data.Value.tileID;
+            data.Value.tileType = TileType.BaseTile;
+
+            tile.GetComponent<Tile>().tileData = data.Value;
         }
     }
 
@@ -207,6 +209,7 @@ public class LevelManager : MonoBehaviour
 public enum TileType
 {
     None,
+    BaseTile,
 }
 
 /// <summary>

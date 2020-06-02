@@ -48,8 +48,6 @@ public class PlayerController : MonoBehaviour
 
             if (startWaiting)
             {
-                Debug.Log((DateTime.Now - delayStartTime).TotalMilliseconds / 1000f);
-
                 if ((DateTime.Now - delayStartTime).TotalMilliseconds >= moveWaitTime * 1000)
                 {
                     targetPathIndex++;

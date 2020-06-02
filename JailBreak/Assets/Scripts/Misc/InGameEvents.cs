@@ -12,3 +12,8 @@ public class PathDrawingCompleteEvent : GameEvent
         this.plottedPoints = plottedPoints;
     }
 }
+
+public class PlayerDetectedEvent : GameEvent
+{
+
+}

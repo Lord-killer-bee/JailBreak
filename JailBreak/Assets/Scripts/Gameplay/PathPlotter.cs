@@ -45,7 +45,7 @@ public class PathPlotter : MonoBehaviour
             {
                 if(hitsinfo[i].collider.tag == GameConsts.BASETILE_TAG)
                 {
-                    int hitTileID = hitsinfo[i].collider.GetComponent<Tile>().tileID;
+                    TileData tileData = hitsinfo[i].collider.GetComponent<Tile>().tileData;
 
                     if (plottedIds.Count == 0)
                     {
@@ -56,12 +56,12 @@ public class PathPlotter : MonoBehaviour
 
                         plottedPoints.Clear();
 
-                        plottedIds.Add(hitTileID);
+                        plottedIds.Add(tileData.tileID);
                         PlotLineToTile(hitsinfo[i].collider.transform.position);
                     }
-                    else if(plottedIds[plottedIds.Count - 1] != hitTileID)
+                    else if(plottedIds[plottedIds.Count - 1] != tileData.tileID)
                     {
-                        plottedIds.Add(hitTileID);
+                        plottedIds.Add(tileData.tileID);
                         PlotLineToTile(hitsinfo[i].collider.transform.position);
                     }
                 }
