@@ -89,7 +89,7 @@ public class SecurityCamera : MonoBehaviour
         }
     }
 
-    #region Getters
+    #region Getters and setters
 
     public float GetDetectionArcRadius()
     {
@@ -111,6 +111,26 @@ public class SecurityCamera : MonoBehaviour
         return cameraPatrolSpeed;
     }
 
+    public void SetDetectionArcRadius(float detectionArcRadius)
+    {
+        this.detectionArcRadius = detectionArcRadius;
+    }
+
+    public void SetDetectionArcAngle(float detectionArcAngle)
+    {
+        this.detectionArcAngle = detectionArcAngle;
+    }
+
+    public void SetCameraPatrolAngle(float cameraPatrolAngle)
+    {
+        this.cameraPatrolAngle = cameraPatrolAngle;
+    }
+
+    public void SetCameraPatrolSpeed(float cameraPatrolSpeed)
+    {
+        this.cameraPatrolSpeed = cameraPatrolSpeed;
+    }
+
     public Transform GetCamImageTransform()
     {
         return camImage.transform;
@@ -126,4 +146,8 @@ public class SecurityCamDataUnit
     public float detectionArcAngle;
     public float cameraPatrolAngle;
     public float cameraPatrolSpeed;
+
+    public Vector2 position;
+    public Quaternion rotation;
+    public Vector3 scale;
 }

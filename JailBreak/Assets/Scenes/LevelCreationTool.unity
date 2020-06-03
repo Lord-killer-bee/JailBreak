@@ -194,6 +194,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &967726020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 967726021}
+  - component: {fileID: 967726022}
+  m_Layer: 0
+  m_Name: TestSceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &967726021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967726020}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &967726022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967726020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d7d55ae15d8df408ac53ff3302fe65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseTilePref: {fileID: 7915944215239287120, guid: 0fe65894d77d97f4c9563264e0a1212f,
+    type: 3}
+  playerPref: {fileID: 9041076973842784733, guid: f600b987d0c94d44baf49a4f39855b31,
+    type: 3}
+  plotterPref: {fileID: 6106118680723158114, guid: 02769a6aaf24da4489b7614ea8bd0c99,
+    type: 3}
+  securityCamPref: {fileID: 6044884542999835482, guid: 90a4e4d1aa20d8d4489276c4c2b4f380,
+    type: 3}
+  enemyPatrolPref: {fileID: 8536263719700830257, guid: 8d90f5873797b204aae52924f3963302,
+    type: 3}
+  laserPref: {fileID: 3278161375871288815, guid: 5fa5b0280c6774a41ab08c078e552ec2,
+    type: 3}
+  currentLevelDataObj: {fileID: 11400000, guid: 432eb493d64304540824eaa879b6b18f,
+    type: 2}
 --- !u!1 &1150266820
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +282,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseTilePref: {fileID: 7915944215239287120, guid: 0fe65894d77d97f4c9563264e0a1212f,
     type: 3}
+  player: {fileID: 9041076973842784733, guid: f600b987d0c94d44baf49a4f39855b31, type: 3}
+  plotter: {fileID: 6106118680723158114, guid: 02769a6aaf24da4489b7614ea8bd0c99, type: 3}
   securityCamPref: {fileID: 6044884542999835482, guid: 90a4e4d1aa20d8d4489276c4c2b4f380,
     type: 3}
   patrolPref: {fileID: 8536263719700830257, guid: 8d90f5873797b204aae52924f3963302,

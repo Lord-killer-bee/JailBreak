@@ -88,6 +88,8 @@ public class PatrollingEnemy : MonoBehaviour
         }
     }
 
+    #region Getters and Setters
+
     public Vector3[] GetWayPoints()
     {
         return waypoints;
@@ -102,6 +104,23 @@ public class PatrollingEnemy : MonoBehaviour
     {
         return detectionTileRange;
     }
+
+    public void SetWayPoints(Vector3[] waypoints)
+    {
+        this.waypoints = waypoints;
+    }
+
+    public void SetMoveSpeed(float moveSpeed)
+    {
+        this.moveSpeed = moveSpeed;
+    }
+
+    public void SetDetectionTileRange(float detectionTileRange)
+    {
+        this.detectionTileRange = detectionTileRange;
+    }
+
+    #endregion
 }
 
 [System.Serializable]
@@ -110,4 +129,8 @@ public class PatrollingEnemyDataUnit
     public Vector3[] waypoints;
     public float moveSpeed;
     public float detectionTileRange;
+
+    public Vector2 position;
+    public Quaternion rotation;
+    public Vector3 scale;
 }

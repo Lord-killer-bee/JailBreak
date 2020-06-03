@@ -8,6 +8,8 @@ public class LevelEditorObjectGenerator : MonoBehaviour
     #region Grid generation
 
     [SerializeField] private GameObject baseTilePref;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject plotter;
 
     private Dictionary<int, TileData> tileDataMap = new Dictionary<int, TileData>();
 
@@ -72,7 +74,7 @@ public class LevelEditorObjectGenerator : MonoBehaviour
         return column + (row) * (maxColumns);
     }
 
-    public void RemoveGrid()
+    public void ClearLevel()
     {
         for (int i = 0; i < tiles.Count; i++)
         {
@@ -81,6 +83,35 @@ public class LevelEditorObjectGenerator : MonoBehaviour
 
         tiles.Clear();
         tileDataMap.Clear();
+
+        SecurityCamera[] cams = FindObjectsOfType<SecurityCamera>();
+
+        for (int i = 0; i < cams.Length; i++)
+        {
+            DestroyImmediate(cams[i].gameObject);
+        }
+
+        //Laser data
+        EnemyLaser[] lasers = FindObjectsOfType<EnemyLaser>();
+
+        for (int i = 0; i < lasers.Length; i++)
+        {
+            DestroyImmediate(lasers[i].gameObject);
+        }
+
+        //Patrol data
+        PatrollingEnemy[] patrollers = FindObjectsOfType<PatrollingEnemy>();
+
+        for (int i = 0; i < patrollers.Length; i++)
+        {
+            DestroyImmediate(patrollers[i].gameObject);
+        }
+
+    }
+
+    public Vector2 GetTileLocation(int tileID)
+    {
+        return tileDataMap[tileID].tileLocation;
     }
 
     #endregion
@@ -91,19 +122,20 @@ public class LevelEditorObjectGenerator : MonoBehaviour
     [SerializeField] private GameObject patrolPref;
     [SerializeField] private GameObject laserPref;
 
-    public void CreateSecurityCam()
+    public GameObject CreateSecurityCam()
     {
-        Instantiate(securityCamPref, Vector3.zero, Quaternion.identity);
+        return Instantiate(securityCamPref, Vector3.zero, Quaternion.identity);
     }
 
-    public void CreatePatrol()
+    public GameObject CreatePatrol()
     {
-        Instantiate(patrolPref, Vector3.zero, Quaternion.identity);
+        return Instantiate(patrolPref, Vector3.zero, Quaternion.identity);
     }
 
-    public void CreateLaser()
+    public GameObject CreateLaser()
     {
-        Instantiate(laserPref, Vector3.zero, Quaternion.identity);
+        return Instantiate(laserPref, Vector3.zero, Quaternion.identity);
     }
+
     #endregion
 }

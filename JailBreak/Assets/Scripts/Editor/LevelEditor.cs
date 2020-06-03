@@ -47,9 +47,9 @@ public class LevelEditor : EditorWindow
             CreateOrUpdateGrid();
         }
 
-        if (GUILayout.Button("Clear grid"))
+        if (GUILayout.Button("Clear level"))
         {
-            RemoveGrid();
+            ClearLevel();
         }
 
         //Start and end tiles
@@ -126,14 +126,71 @@ public class LevelEditor : EditorWindow
         objectGenerator.CreateGrid(rowCount, columnCount);
     }
 
-    private void RemoveGrid()
+    private void ClearLevel()
     {
-        objectGenerator.RemoveGrid();
+        objectGenerator.ClearLevel();
     }
 
     private void LoadTheLevel()
     {
-        throw new NotImplementedException();
+        if(loadLevelData == null)
+        {
+            Debug.Log("Level data should be specified");
+            return;
+        }
+
+        objectGenerator.ClearLevel();
+
+        rowCount = loadLevelData.rowCount;
+        columnCount = loadLevelData.columnCount;
+
+        startTileID = loadLevelData.startTileID;
+        endTileID = loadLevelData.endTileID;
+
+        wallTileIds = loadLevelData.wallTileIds;
+
+        for (int i = 0; i < loadLevelData.securityCamsdata.Count; i++)
+        {
+            GameObject cam = objectGenerator.CreateSecurityCam();
+            SecurityCamera camComp = cam.GetComponent<SecurityCamera>();
+
+            camComp.SetCameraPatrolAngle(loadLevelData.securityCamsdata[i].cameraPatrolAngle);
+            camComp.SetCameraPatrolSpeed(loadLevelData.securityCamsdata[i].cameraPatrolSpeed);
+            camComp.SetDetectionArcAngle(loadLevelData.securityCamsdata[i].detectionArcAngle);
+            camComp.SetDetectionArcRadius(loadLevelData.securityCamsdata[i].detectionArcRadius);
+
+            cam.transform.position = loadLevelData.securityCamsdata[i].position;
+            cam.transform.rotation = loadLevelData.securityCamsdata[i].rotation;
+            cam.transform.localScale = loadLevelData.securityCamsdata[i].scale;
+        }
+
+        for (int i = 0; i < loadLevelData.patrollersdata.Count; i++)
+        {
+            GameObject patrol = objectGenerator.CreatePatrol();
+            PatrollingEnemy patrolComp = patrol.GetComponent<PatrollingEnemy>();
+
+            patrolComp.SetDetectionTileRange(loadLevelData.patrollersdata[i].detectionTileRange);
+            patrolComp.SetMoveSpeed(loadLevelData.patrollersdata[i].moveSpeed);
+            patrolComp.SetWayPoints(loadLevelData.patrollersdata[i].waypoints);
+
+            patrol.transform.position = loadLevelData.patrollersdata[i].position;
+            patrol.transform.rotation = loadLevelData.patrollersdata[i].rotation;
+            patrol.transform.localScale = loadLevelData.patrollersdata[i].scale;
+        }
+
+        for (int i = 0; i < loadLevelData.lasersdata.Count; i++)
+        {
+            GameObject laser = objectGenerator.CreateLaser();
+            EnemyLaser laserComp = laser.GetComponent<EnemyLaser>();
+
+            laserComp.SetLaserEndPositions(loadLevelData.lasersdata[i].laserEnds);
+
+            laser.transform.position = loadLevelData.lasersdata[i].position;
+            laser.transform.rotation = loadLevelData.lasersdata[i].rotation;
+            laser.transform.localScale = loadLevelData.lasersdata[i].scale;
+        }
+
+        CreateOrUpdateGrid();
     }
 
     private void SaveTheLevel()
@@ -157,6 +214,10 @@ public class LevelEditor : EditorWindow
             levelData.securityCamsdata[i].cameraPatrolSpeed = cams[i].GetCameraPatrolSpeed();
             levelData.securityCamsdata[i].detectionArcAngle = cams[i].GetDetectionArcAngle();
             levelData.securityCamsdata[i].detectionArcRadius = cams[i].GetDetectionArcRadius();
+
+            levelData.securityCamsdata[i].position = cams[i].transform.position;
+            levelData.securityCamsdata[i].rotation = cams[i].transform.rotation;
+            levelData.securityCamsdata[i].scale = cams[i].transform.localScale;
         }
 
         //Laser data
@@ -167,6 +228,10 @@ public class LevelEditor : EditorWindow
         {
             levelData.lasersdata.Add(new EnemyLaserDataUnit());
             levelData.lasersdata[i].laserEnds = lasers[i].GetLaserEndPositions();
+
+            levelData.lasersdata[i].position = lasers[i].transform.position;
+            levelData.lasersdata[i].rotation = lasers[i].transform.rotation;
+            levelData.lasersdata[i].scale = lasers[i].transform.localScale;
         }
 
         //Patrol data
@@ -179,6 +244,10 @@ public class LevelEditor : EditorWindow
             levelData.patrollersdata[i].moveSpeed = patrollers[i].GetMoveSpeed();
             levelData.patrollersdata[i].detectionTileRange = patrollers[i].GetDetectionTileRange();
             levelData.patrollersdata[i].waypoints = patrollers[i].GetWayPoints();
+
+            levelData.patrollersdata[i].position = patrollers[i].transform.position;
+            levelData.patrollersdata[i].rotation = patrollers[i].transform.rotation;
+            levelData.patrollersdata[i].scale = patrollers[i].transform.localScale;
         }
 
         //Setting dirty

@@ -5,25 +5,21 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    #region Constants
-
-    [SerializeField] private int gridRows = 10;
-    [SerializeField] private int gridColumns = 10;
-
-    #endregion
-
     #region Scene refs
 
     [SerializeField] private GameObject baseTilePref;
-    [SerializeField] private GameObject startPoint;
-    [SerializeField] private GameObject endPoint;
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject plotter;
+    [SerializeField] private GameObject playerPref;
+    [SerializeField] private GameObject plotterPref;
+    [SerializeField] private GameObject securityCamPref;
+    [SerializeField] private GameObject enemyPatrolPref;
+    [SerializeField] private GameObject laserPref;
+    [SerializeField] private LevelData currentLevelDataObj;
 
     #endregion
 
     #region Private variables
     private Dictionary<int, TileData> tileDataMap = new Dictionary<int, TileData>();
+    private GameObject player, plotter;
 
     #endregion
 
@@ -74,12 +70,12 @@ public class LevelManager : MonoBehaviour
         float x = 0, y = 0;
         int tileID;
 
-        for (int row = 0; row < gridRows; row++)
+        for (int row = 0; row < currentLevelDataObj.rowCount; row++)
         {
-            for (int column = 0; column < gridColumns; column++)
+            for (int column = 0; column < currentLevelDataObj.columnCount; column++)
             {
-                x = column - ((float)gridColumns - 1) / 2;
-                y = ((float)gridRows - 1) / 2 - row;
+                x = column - ((float)currentLevelDataObj.columnCount - 1) / 2;
+                y = ((float)currentLevelDataObj.rowCount - 1) / 2 - row;
 
                 tileID = GetTileID(row, column);
 
@@ -100,7 +96,7 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     public int GetTileID(int row, int column)
     {
-        return column + (row) * (gridColumns);
+        return column + (row) * (currentLevelDataObj.columnCount);
     }
 
     /// <summary>
@@ -110,7 +106,7 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     public int GetRow(int tileID)
     {
-        return tileID / gridColumns;
+        return tileID / currentLevelDataObj.columnCount;
     }
 
     /// <summary>
@@ -120,7 +116,7 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     public int GetColumn(int tileID)
     {
-        return tileID - GetRow(tileID) * gridColumns;
+        return tileID - GetRow(tileID) * currentLevelDataObj.columnCount;
     }
 
     /// <summary>
@@ -151,7 +147,7 @@ public class LevelManager : MonoBehaviour
         int row = GetRow(tileID);
         int column = GetColumn(tileID);
 
-        if (column != gridColumns - 1)
+        if (column != currentLevelDataObj.columnCount - 1)
             return tileDataMap[GetTileID(row, column + 1)];
         else
             return null;
@@ -183,7 +179,7 @@ public class LevelManager : MonoBehaviour
         int row = GetRow(tileID);
         int column = GetColumn(tileID);
 
-        if (row != gridRows - 1)
+        if (row != currentLevelDataObj.rowCount - 1)
             return tileDataMap[GetTileID(row + 1, column)];
         else
             return null;
@@ -195,8 +191,54 @@ public class LevelManager : MonoBehaviour
 
     private void SetupLevelElements()
     {
-        player.transform.position = startPoint.transform.position;
-        plotter.transform.position = startPoint.transform.position;
+        player = Instantiate(playerPref);
+        player.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        player.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+
+        plotter = Instantiate(plotterPref);
+        plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+
+        for (int i = 0; i < currentLevelDataObj.securityCamsdata.Count; i++)
+        {
+            GameObject cam = Instantiate(securityCamPref);
+            SecurityCamera camComp = cam.GetComponent<SecurityCamera>();
+
+            camComp.SetCameraPatrolAngle(currentLevelDataObj.securityCamsdata[i].cameraPatrolAngle);
+            camComp.SetCameraPatrolSpeed(currentLevelDataObj.securityCamsdata[i].cameraPatrolSpeed);
+            camComp.SetDetectionArcAngle(currentLevelDataObj.securityCamsdata[i].detectionArcAngle);
+            camComp.SetDetectionArcRadius(currentLevelDataObj.securityCamsdata[i].detectionArcRadius);
+
+            cam.transform.position = currentLevelDataObj.securityCamsdata[i].position;
+            cam.transform.rotation = currentLevelDataObj.securityCamsdata[i].rotation;
+            cam.transform.localScale = currentLevelDataObj.securityCamsdata[i].scale;
+        }
+
+        for (int i = 0; i < currentLevelDataObj.patrollersdata.Count; i++)
+        {
+            GameObject patrol = Instantiate(enemyPatrolPref);
+            PatrollingEnemy patrolComp = patrol.GetComponent<PatrollingEnemy>();
+
+            patrolComp.SetDetectionTileRange(currentLevelDataObj.patrollersdata[i].detectionTileRange);
+            patrolComp.SetMoveSpeed(currentLevelDataObj.patrollersdata[i].moveSpeed);
+            patrolComp.SetWayPoints(currentLevelDataObj.patrollersdata[i].waypoints);
+
+            patrol.transform.position = currentLevelDataObj.patrollersdata[i].position;
+            patrol.transform.rotation = currentLevelDataObj.patrollersdata[i].rotation;
+            patrol.transform.localScale = currentLevelDataObj.patrollersdata[i].scale;
+        }
+
+        for (int i = 0; i < currentLevelDataObj.lasersdata.Count; i++)
+        {
+            GameObject laser = Instantiate(laserPref);
+            EnemyLaser laserComp = laser.GetComponent<EnemyLaser>();
+
+            laserComp.SetLaserEndPositions(currentLevelDataObj.lasersdata[i].laserEnds);
+
+            laser.transform.position = currentLevelDataObj.lasersdata[i].position;
+            laser.transform.rotation = currentLevelDataObj.lasersdata[i].rotation;
+            laser.transform.localScale = currentLevelDataObj.lasersdata[i].scale;
+        }
     }
 
     #endregion
@@ -215,6 +257,7 @@ public enum TileType
 /// <summary>
 /// Class to store the data required for a tile
 /// </summary>
+[System.Serializable]
 public class TileData
 {
     public int tileID;
