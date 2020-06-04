@@ -15,5 +15,9 @@ public class PathDrawingCompleteEvent : GameEvent
 
 public class PlayerDetectedEvent : GameEvent
 {
-
+    public PlayerDetectedEvent()
+    {
+        Debug.Log("Player detected!!");
+    }
 }
+

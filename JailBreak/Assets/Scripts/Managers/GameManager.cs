@@ -4,15 +4,42 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameStateType currentGameState;
+
+    void SetState(GameStateType state)
     {
-        
+        if(currentGameState != state)
+            currentGameState = state;
+
+        switch (currentGameState)
+        {
+            case GameStateType.LevelSetup:
+                break;
+            case GameStateType.ExamineLevel:
+                break;
+            case GameStateType.Plotting:
+                break;
+            case GameStateType.SimulateLevel:
+                break;
+            case GameStateType.TransitionToNextLevel:
+                break;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void UpdateCurrentState()
     {
-        
+        switch (currentGameState)
+        {
+            case GameStateType.LevelSetup:
+                break;
+            case GameStateType.ExamineLevel:
+                break;
+            case GameStateType.Plotting:
+                break;
+            case GameStateType.SimulateLevel:
+                break;
+            case GameStateType.TransitionToNextLevel:
+                break;
+        }
     }
 }
