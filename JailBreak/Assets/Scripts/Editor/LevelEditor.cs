@@ -11,7 +11,12 @@ public class LevelEditor : EditorWindow
     private int columnCount;
 
     private int startTileID;
+
     private int endTileID;
+    private int keyTileID;
+    private int stationTileID;
+
+    public GameRuleType ruleType;
 
     public List<int> wallTileIds;
 
@@ -36,6 +41,9 @@ public class LevelEditor : EditorWindow
 
     private void OnGUI()
     {
+        ScriptableObject scriptableObj = this;
+        SerializedObject serialObj = new SerializedObject(scriptableObj);
+
         //Grid creation
         EditorGUILayout.HelpBox("Create a grid with column and rows", MessageType.Info);
 
@@ -53,16 +61,33 @@ public class LevelEditor : EditorWindow
         }
 
         //Start and end tiles
-        EditorGUILayout.HelpBox("Select enemy start and end tiles", MessageType.Info);
+        EditorGUILayout.HelpBox("Select player start and end tiles", MessageType.Info);
+
+        SerializedProperty ruleTypeProp = serialObj.FindProperty("ruleType");
+
+        EditorGUILayout.PropertyField(ruleTypeProp, true);
+        serialObj.ApplyModifiedProperties();
 
         startTileID = EditorGUILayout.IntField(new GUIContent("Start tile ID "), startTileID);
-        endTileID = EditorGUILayout.IntField(new GUIContent("End tile ID "), endTileID);
+
+        if (ruleType == GameRuleType.DirectExit)
+        {
+            endTileID = EditorGUILayout.IntField(new GUIContent("End tile ID "), endTileID);
+        }
+        else if (ruleType == GameRuleType.PickKeyThenExit)
+        {
+            endTileID = EditorGUILayout.IntField(new GUIContent("End tile ID "), endTileID);
+            keyTileID = EditorGUILayout.IntField(new GUIContent("Key tile ID "), keyTileID);
+        }
+        else if (ruleType == GameRuleType.HackStationThenExit)
+        {
+            endTileID = EditorGUILayout.IntField(new GUIContent("End tile ID "), endTileID);
+            stationTileID = EditorGUILayout.IntField(new GUIContent("Station tile ID "), stationTileID);
+        }
 
         //Wall tiles
         EditorGUILayout.HelpBox("Select wall tiles", MessageType.Info);
 
-        ScriptableObject scriptableObj = this;
-        SerializedObject serialObj = new SerializedObject(scriptableObj);
         SerializedProperty serialProp = serialObj.FindProperty("wallTileIds");
 
         EditorGUILayout.PropertyField(serialProp, true);
@@ -147,6 +172,10 @@ public class LevelEditor : EditorWindow
         startTileID = loadLevelData.startTileID;
         endTileID = loadLevelData.endTileID;
 
+        ruleType = loadLevelData.ruleType;
+        keyTileID = loadLevelData.keyTileID;
+        stationTileID = loadLevelData.stationTileID;
+
         wallTileIds = loadLevelData.wallTileIds;
 
         for (int i = 0; i < loadLevelData.securityCamsdata.Count; i++)
@@ -200,6 +229,9 @@ public class LevelEditor : EditorWindow
 
         levelData.startTileID = startTileID;
         levelData.endTileID = endTileID;
+        levelData.keyTileID = keyTileID;
+        levelData.stationTileID = stationTileID;
+        levelData.ruleType = ruleType;
 
         levelData.wallTileIds = wallTileIds;
 

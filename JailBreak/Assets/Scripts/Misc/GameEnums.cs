@@ -7,3 +7,11 @@
     SimulateLevel,
     TransitionToNextLevel,
 }
+
+public enum GameRuleType
+{
+    None,
+    DirectExit,
+    PickKeyThenExit,
+    HackStationThenExit
+}

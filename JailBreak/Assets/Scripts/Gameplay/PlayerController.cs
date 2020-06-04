@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveWaitTime;
 
     private List<Vector2> plottedPoints;
+    public List<int> plottedTileIDs;
     bool startTraversal = false;
     bool startWaiting = false;
 
@@ -48,6 +49,8 @@ public class PlayerController : MonoBehaviour
                 delayStartTime = DateTime.Now;
                 currentPathIndex++;
                 startWaiting = true;
+
+                GameEventManager.Instance.TriggerAsyncEvent(new PlayerMovedToTileEvent(plottedTileIDs[currentPathIndex]));
             }
 
             if (startWaiting)
@@ -65,7 +68,6 @@ public class PlayerController : MonoBehaviour
             if (currentPathIndex >= plottedPoints.Count)
             {
                 startTraversal = false;
-                GameEventManager.Instance.TriggerSyncEvent(new PlayerCompletedLevelEvent());
             }
         }
     }
@@ -82,6 +84,7 @@ public class PlayerController : MonoBehaviour
     private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
     {
         plottedPoints = e.plottedPoints;
+        plottedTileIDs = e.plottedTileIDs;
     }
 
     private void OnGameStateChanged(GameStateChangedEvent e)

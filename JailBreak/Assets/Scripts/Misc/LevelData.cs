@@ -11,6 +11,10 @@ public class LevelData : ScriptableObject
     
     public int startTileID;
     public int endTileID;
+    public int keyTileID;
+    public int stationTileID;
+
+    public GameRuleType ruleType;
 
     public List<int> wallTileIds;
 

@@ -60,8 +60,11 @@ public class LevelManager : MonoBehaviour
             case GameStateType.LevelSetup:
                 CreateGrid();
                 SetupLevelElements();
+
+                GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.LevelSetup));
                 break;
             case GameStateType.ExamineLevel:
+                GameEventManager.Instance.TriggerSyncEvent(new SetCurrentLevelID(currentLevelID));
                 break;
             case GameStateType.Plotting:
                 plotter.SetActive(true);
@@ -311,8 +314,6 @@ public class LevelManager : MonoBehaviour
 
             laser.GetComponent<EnemyLaser>().Initialize();
         }
-
-        GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.LevelSetup));
     }
 
     public void ClearLevel()

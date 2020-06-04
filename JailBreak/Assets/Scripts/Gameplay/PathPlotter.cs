@@ -58,7 +58,7 @@ public class PathPlotter : MonoBehaviour
             else if (Input.GetMouseButtonUp(0))
             {
                 if (plotterPicked)
-                    GameEventManager.Instance.TriggerSyncEvent(new PathDrawingCompleteEvent(plottedPoints));
+                    GameEventManager.Instance.TriggerSyncEvent(new PathDrawingCompleteEvent(plottedPoints, plottedIds));
 
                 plotterPicked = false;
             }
