@@ -23,11 +23,15 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
+        GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.AddListener<PlayerDetectedEvent>(OnPlayerDetected);
     }
 
     private void OnDestroy()
     {
         GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
+        GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetected);
     }
 
     private void Update()
@@ -61,15 +65,9 @@ public class PlayerController : MonoBehaviour
             if (currentPathIndex >= plottedPoints.Count)
             {
                 startTraversal = false;
+                GameEventManager.Instance.TriggerSyncEvent(new PlayerCompletedLevelEvent());
             }
         }
-    }
-
-    private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
-    {
-        plottedPoints = e.plottedPoints;
-
-        StartTraversal();
     }
 
     private void StartTraversal()
@@ -80,4 +78,21 @@ public class PlayerController : MonoBehaviour
 
         targetPosition = plottedPoints[targetPathIndex];
     }
+
+    private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
+    {
+        plottedPoints = e.plottedPoints;
+    }
+
+    private void OnGameStateChanged(GameStateChangedEvent e)
+    {
+        if (e.stateType == GameStateType.SimulateLevel)
+            StartTraversal();
+    }
+
+    private void OnPlayerDetected(PlayerDetectedEvent e)
+    {
+        startTraversal = false;
+    }
+
 }

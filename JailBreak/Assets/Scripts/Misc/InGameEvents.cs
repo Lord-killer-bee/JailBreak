@@ -13,6 +13,11 @@ public class PathDrawingCompleteEvent : GameEvent
     }
 }
 
+public class ResetPlotterEvent : GameEvent
+{
+
+}
+
 public class PlayerDetectedEvent : GameEvent
 {
     public PlayerDetectedEvent()
@@ -21,3 +26,32 @@ public class PlayerDetectedEvent : GameEvent
     }
 }
 
+public class GameStateChangedEvent : GameEvent
+{
+    public GameStateType stateType;
+
+    public GameStateChangedEvent(GameStateType stateType)
+    {
+        this.stateType = stateType;
+    }
+}
+
+public class GameStateCompletedEvent : GameEvent
+{
+    public GameStateType stateType;
+
+    public GameStateCompletedEvent(GameStateType stateType)
+    {
+        this.stateType = stateType;
+    }
+}
+
+public class PlayerCompletedLevelEvent : GameEvent
+{
+
+}
+
+public class RestartLevelEvent : GameEvent
+{
+
+}

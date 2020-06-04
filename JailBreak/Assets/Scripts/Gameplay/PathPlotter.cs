@@ -10,71 +10,98 @@ public class PathPlotter : MonoBehaviour
 
     private List<Vector2> plottedPoints = new List<Vector2>();
     bool plotterPicked = false;
+    bool objectInitialized = false;
 
     private LineRenderer line;
 
     private List<int> plottedIds = new List<int>();
 
+    public void Initialize()
+    {
+        objectInitialized = true;
+    }
+
+    public void DisablePlotting()
+    {
+        objectInitialized = false;
+        line.positionCount--;
+    }
+
+    public void ResetPlotter()
+    {
+        line.positionCount = 0;
+        plottedPoints.Clear();
+        plottedIds.Clear();
+    }
+
+    public void DestroyPlotterLine()
+    {
+        Destroy(line);
+    }
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (objectInitialized)
         {
-            RaycastHit2D[] hitsinfo = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, 100f);
-
-            for (int i = 0; i < hitsinfo.Length; i++)
+            if (Input.GetMouseButtonDown(0))
             {
-                if (hitsinfo[i].collider.gameObject == gameObject)
+                RaycastHit2D[] hitsinfo = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, 100f);
+
+                for (int i = 0; i < hitsinfo.Length; i++)
                 {
-                    plotterPicked = true;
-                }
-            }
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            if(plotterPicked)
-                GameEventManager.Instance.TriggerSyncEvent(new PathDrawingCompleteEvent(plottedPoints));
-
-            plotterPicked = false;
-        }
-
-        if (plotterPicked)
-        {
-            RaycastHit2D[] hitsinfo = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, 100f);
-
-            for (int i = 0; i < hitsinfo.Length; i++)
-            {
-                if(hitsinfo[i].collider.tag == GameConsts.BASETILE_TAG)
-                {
-                    TileData tileData = hitsinfo[i].collider.GetComponent<Tile>().tileData;
-
-                    if (plottedIds.Count == 0)
+                    if (hitsinfo[i].collider.gameObject == gameObject)
                     {
-                        GameObject lineObj = Instantiate(plotterLinePref);
-                        line = lineObj.GetComponentInChildren<LineRenderer>();
-                        line.transform.position = Vector3.zero;
-                        line.transform.localScale = Vector3.one;
-
-                        plottedPoints.Clear();
-
-                        plottedIds.Add(tileData.tileID);
-                        PlotLineToTile(hitsinfo[i].collider.transform.position);
-                    }
-                    else if(plottedIds[plottedIds.Count - 1] != tileData.tileID)
-                    {
-                        plottedIds.Add(tileData.tileID);
-                        PlotLineToTile(hitsinfo[i].collider.transform.position);
+                        plotterPicked = true;
                     }
                 }
             }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                if (plotterPicked)
+                    GameEventManager.Instance.TriggerSyncEvent(new PathDrawingCompleteEvent(plottedPoints));
 
-            Vector3 pos;
-            pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            pos.z = 0;
+                plotterPicked = false;
+            }
 
-            transform.position = pos;
+            if (plotterPicked)
+            {
+                RaycastHit2D[] hitsinfo = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, 100f);
 
-            if(plottedIds.Count != 0)
-                line.SetPosition(line.positionCount - 1, pos);
+                for (int i = 0; i < hitsinfo.Length; i++)
+                {
+                    if (hitsinfo[i].collider.tag == GameConsts.BASETILE_TAG)
+                    {
+                        TileData tileData = hitsinfo[i].collider.GetComponent<Tile>().tileData;
+
+                        if (plottedIds.Count == 0)
+                        {
+                            GameObject lineObj = Instantiate(plotterLinePref);
+                            line = lineObj.GetComponentInChildren<LineRenderer>();
+                            line.transform.position = Vector3.zero;
+                            line.transform.localScale = Vector3.one;
+
+                            plottedPoints.Clear();
+
+                            plottedIds.Add(tileData.tileID);
+                            PlotLineToTile(hitsinfo[i].collider.transform.position);
+                        }
+                        else if (plottedIds[plottedIds.Count - 1] != tileData.tileID)
+                        {
+                            plottedIds.Add(tileData.tileID);
+                            PlotLineToTile(hitsinfo[i].collider.transform.position);
+                        }
+                    }
+                }
+
+                Vector3 pos;
+                pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                pos.z = 0;
+
+                transform.position = pos;
+
+                if (plottedIds.Count != 0)
+                    line.SetPosition(line.positionCount - 1, pos);
+            }
         }
     }
 

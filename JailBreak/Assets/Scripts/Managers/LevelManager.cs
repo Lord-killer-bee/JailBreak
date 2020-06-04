@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Core;
 
 public class LevelManager : MonoBehaviour
 {
@@ -13,12 +14,15 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject securityCamPref;
     [SerializeField] private GameObject enemyPatrolPref;
     [SerializeField] private GameObject laserPref;
-    [SerializeField] private LevelData currentLevelDataObj;
+
+    private LevelData currentLevelDataObj;
+    private int currentLevelID;
 
     #endregion
 
     #region Private variables
     private Dictionary<int, TileData> tileDataMap = new Dictionary<int, TileData>();
+    private List<GameObject> tiles = new List<GameObject>();
     private GameObject player, plotter;
 
     #endregion
@@ -27,8 +31,64 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        CreateGrid();
-        SetupLevelElements();
+        currentLevelID = 0;
+        currentLevelDataObj = Resources.Load<LevelData>(GameConsts.LEVEL_DATA_PATH + currentLevelID);
+    }
+
+    private void OnEnable()
+    {
+        GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.AddListener<ResetPlotterEvent>(OnResetPlotter);
+        GameEventManager.Instance.AddListener<RestartLevelEvent>(OnRestartLevel);
+    }
+
+    private void OnDisable()
+    {
+        GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.RemoveListener<ResetPlotterEvent>(OnResetPlotter);
+        GameEventManager.Instance.RemoveListener<RestartLevelEvent>(OnRestartLevel);
+    }
+
+    #endregion
+
+    #region Event listeners
+
+    private void OnGameStateChanged(GameStateChangedEvent e)
+    {
+        switch (e.stateType)
+        {
+            case GameStateType.LevelSetup:
+                CreateGrid();
+                SetupLevelElements();
+                break;
+            case GameStateType.ExamineLevel:
+                break;
+            case GameStateType.Plotting:
+                plotter.SetActive(true);
+                plotter.GetComponent<PathPlotter>().Initialize();
+                break;
+            case GameStateType.SimulateLevel:
+                plotter.GetComponent<PathPlotter>().DisablePlotting();
+                plotter.SetActive(false);
+                break;
+            case GameStateType.TransitionToNextLevel:
+                LoadNextLevel();
+                break;
+        }
+    }
+
+    private void OnResetPlotter(ResetPlotterEvent e)
+    {
+        plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+        plotter.GetComponent<PathPlotter>().ResetPlotter();
+    }
+
+    private void OnRestartLevel(RestartLevelEvent e)
+    {
+        player.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+        plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+        plotter.GetComponent<PathPlotter>().ResetPlotter();
+        plotter.SetActive(false);
     }
 
     #endregion
@@ -47,6 +107,8 @@ public class LevelManager : MonoBehaviour
         GameObject tile = null;
         GameObject tilePref = null;
 
+        tiles.Clear();
+
         foreach (KeyValuePair<int, TileData> data in tileDataMap)
         {
             tilePref = baseTilePref;
@@ -55,6 +117,8 @@ public class LevelManager : MonoBehaviour
             tile.transform.localPosition = data.Value.tileLocation;
             tile.transform.localScale = Vector3.one;
             tile.transform.localRotation = Quaternion.identity;
+
+            tiles.Add(tile);
 
             data.Value.tileType = TileType.BaseTile;
 
@@ -199,6 +263,8 @@ public class LevelManager : MonoBehaviour
         plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
 
+        plotter.SetActive(false);
+
         for (int i = 0; i < currentLevelDataObj.securityCamsdata.Count; i++)
         {
             GameObject cam = Instantiate(securityCamPref);
@@ -212,6 +278,8 @@ public class LevelManager : MonoBehaviour
             cam.transform.position = currentLevelDataObj.securityCamsdata[i].position;
             cam.transform.rotation = currentLevelDataObj.securityCamsdata[i].rotation;
             cam.transform.localScale = currentLevelDataObj.securityCamsdata[i].scale;
+
+            cam.GetComponent<SecurityCamera>().Initialize();
         }
 
         for (int i = 0; i < currentLevelDataObj.patrollersdata.Count; i++)
@@ -226,6 +294,8 @@ public class LevelManager : MonoBehaviour
             patrol.transform.position = currentLevelDataObj.patrollersdata[i].position;
             patrol.transform.rotation = currentLevelDataObj.patrollersdata[i].rotation;
             patrol.transform.localScale = currentLevelDataObj.patrollersdata[i].scale;
+
+            patrol.GetComponent<PatrollingEnemy>().Initialize();
         }
 
         for (int i = 0; i < currentLevelDataObj.lasersdata.Count; i++)
@@ -238,6 +308,70 @@ public class LevelManager : MonoBehaviour
             laser.transform.position = currentLevelDataObj.lasersdata[i].position;
             laser.transform.rotation = currentLevelDataObj.lasersdata[i].rotation;
             laser.transform.localScale = currentLevelDataObj.lasersdata[i].scale;
+
+            laser.GetComponent<EnemyLaser>().Initialize();
+        }
+
+        GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.LevelSetup));
+    }
+
+    public void ClearLevel()
+    {
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            Destroy(tiles[i]);
+        }
+
+        tiles.Clear();
+        tileDataMap.Clear();
+
+        Destroy(player);
+
+        plotter.GetComponent<PathPlotter>().DestroyPlotterLine();
+        Destroy(plotter);
+
+        SecurityCamera[] cams = FindObjectsOfType<SecurityCamera>();
+
+        for (int i = 0; i < cams.Length; i++)
+        {
+            Destroy(cams[i].gameObject);
+        }
+
+        //Laser data
+        EnemyLaser[] lasers = FindObjectsOfType<EnemyLaser>();
+
+        for (int i = 0; i < lasers.Length; i++)
+        {
+            Destroy(lasers[i].gameObject);
+        }
+
+        //Patrol data
+        PatrollingEnemy[] patrollers = FindObjectsOfType<PatrollingEnemy>();
+
+        for (int i = 0; i < patrollers.Length; i++)
+        {
+            Destroy(patrollers[i].gameObject);
+        }
+
+    }
+
+    private void LoadNextLevel()
+    {
+        currentLevelID++;
+        currentLevelDataObj = Resources.Load<LevelData>(GameConsts.LEVEL_DATA_PATH + currentLevelID);
+
+        if (currentLevelDataObj == null)
+        {
+            Debug.LogError("Level file not found!!");
+            return;
+        }
+        else
+        {
+            ClearLevel();
+            CreateGrid();
+            SetupLevelElements();
+
+            GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.TransitionToNextLevel));
         }
     }
 

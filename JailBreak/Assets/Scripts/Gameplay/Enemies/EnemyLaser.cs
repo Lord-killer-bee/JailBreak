@@ -10,6 +10,11 @@ public class EnemyLaser : MonoBehaviour
     private Vector3[] laserEndPositions = new Vector3[2];
     private bool playerDetected = false;
 
+    public void Initialize()
+    {
+
+    }
+
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.tag == GameConsts.PLAYER_TAG)

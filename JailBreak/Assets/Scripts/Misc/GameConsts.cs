@@ -16,4 +16,10 @@ public class GameConsts
     public const int PLAYER_LAYER_MASK = 1 << 8;
 
     #endregion
+
+    #region Resources file paths
+
+    public const string LEVEL_DATA_PATH = "LevelData/Level";
+
+    #endregion
 }

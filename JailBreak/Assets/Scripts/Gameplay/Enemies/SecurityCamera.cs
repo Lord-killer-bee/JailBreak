@@ -21,7 +21,7 @@ public class SecurityCamera : MonoBehaviour
 
     bool playerDetected = false;
 
-    void Start()
+    public void Initialize()
     {
         leftMargin = Quaternion.AngleAxis((cameraPatrolAngle / 2) - (detectionArcAngle / 2), Vector3.forward) * camImage.transform.up;
         rightMargin = Quaternion.AngleAxis(-((cameraPatrolAngle / 2) - (detectionArcAngle / 2)), Vector3.forward) * camImage.transform.up;

@@ -18,7 +18,7 @@ public class PatrollingEnemy : MonoBehaviour
     private Vector2 targetPosition;
     private int moveDirection = 1;
 
-    private void Start()
+    public void Initialize()
     {
         objectInitialized = true;
 
