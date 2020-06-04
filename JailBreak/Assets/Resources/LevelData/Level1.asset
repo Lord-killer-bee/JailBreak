@@ -12,29 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978301cc465c0f44cb6692eec9f7c1e2, type: 3}
   m_Name: Level1
   m_EditorClassIdentifier: 
-  rowCount: 5
-  columnCount: 5
+  rowCount: 9
+  columnCount: 9
   startTileID: 1
   endTileID: 10
-  wallTileIds: 
-  securityCamsdata:
-  - detectionArcRadius: 3
-    detectionArcAngle: 30
-    cameraPatrolAngle: 120
-    cameraPatrolSpeed: 0.5
-    position: {x: 0, y: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 1}
-    scale: {x: 1, y: 1, z: 1}
+  wallTileIds: 030000000500000006000000080000000b000000
+  securityCamsdata: []
   lasersdata: []
-  patrollersdata:
-  - waypoints:
-    - {x: -11.907719, y: 1.9606758, z: 0}
-    - {x: -10.392274, y: 5.2017536, z: 0}
-    - {x: -7.504974, y: 6.2237267, z: 0}
-    - {x: -2.6970441, y: 6.519325, z: 0}
-    - {x: -1.510315, y: 0.5162606, z: 0}
-    moveSpeed: 3
-    detectionTileRange: 3
-    position: {x: 0, y: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 1}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
+  patrollersdata: []
