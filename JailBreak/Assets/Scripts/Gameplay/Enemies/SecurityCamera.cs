@@ -32,7 +32,7 @@ public class SecurityCamera : MonoBehaviour
 
     void Update()
     {
-        if (objectInitialized)
+        if (objectInitialized || TestLevelManager.testEnvironment)
         {
             Vector2 rotation;
             if (rotationDirection == 1)

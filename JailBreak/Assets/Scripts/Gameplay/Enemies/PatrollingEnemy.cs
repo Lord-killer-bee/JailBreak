@@ -35,7 +35,7 @@ public class PatrollingEnemy : MonoBehaviour
 
     private void Update()
     {
-        if (objectInitialized)
+        if (objectInitialized || TestLevelManager.testEnvironment)
         {
             if (currentPathIndex != targetPathIndex)
             {

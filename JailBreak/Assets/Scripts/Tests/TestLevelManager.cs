@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core;
 
-public class LevelManager : MonoBehaviour
+public class TestLevelManager : MonoBehaviour
 {
+    public static bool testEnvironment = false;
+
     #region Scene refs
 
     [SerializeField] private GameObject baseTilePref;
@@ -14,15 +16,12 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject securityCamPref;
     [SerializeField] private GameObject enemyPatrolPref;
     [SerializeField] private GameObject laserPref;
-
-    private LevelData currentLevelDataObj;
-    private int currentLevelID;
+    [SerializeField] private LevelData currentLevelDataObj;
 
     #endregion
 
     #region Private variables
     private Dictionary<int, TileData> tileDataMap = new Dictionary<int, TileData>();
-    private List<GameObject> tiles = new List<GameObject>();
     private GameObject player, plotter;
 
     #endregion
@@ -31,68 +30,9 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        currentLevelID = 0;
-        currentLevelDataObj = 
-            Resources.Load<LevelData>(GameConsts.LEVEL_DATA_PATH + currentLevelID);
-    }
-
-    private void OnEnable()
-    {
-        GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
-        GameEventManager.Instance.AddListener<ResetPlotterEvent>(OnResetPlotter);
-        GameEventManager.Instance.AddListener<RestartLevelEvent>(OnRestartLevel);
-    }
-
-    private void OnDisable()
-    {
-        GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
-        GameEventManager.Instance.RemoveListener<ResetPlotterEvent>(OnResetPlotter);
-        GameEventManager.Instance.RemoveListener<RestartLevelEvent>(OnRestartLevel);
-    }
-
-    #endregion
-
-    #region Event listeners
-
-    private void OnGameStateChanged(GameStateChangedEvent e)
-    {
-        switch (e.stateType)
-        {
-            case GameStateType.LevelSetup:
-                CreateGrid();
-                SetupLevelElements();
-
-                GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.LevelSetup));
-                break;
-            case GameStateType.ExamineLevel:
-                GameEventManager.Instance.TriggerSyncEvent(new SetCurrentLevelID(currentLevelID));
-                break;
-            case GameStateType.Plotting:
-                plotter.SetActive(true);
-                plotter.GetComponent<PathPlotter>().Initialize();
-                break;
-            case GameStateType.SimulateLevel:
-                plotter.GetComponent<PathPlotter>().DisablePlotting();
-                plotter.SetActive(false);
-                break;
-            case GameStateType.TransitionToNextLevel:
-                LoadNextLevel();
-                break;
-        }
-    }
-
-    private void OnResetPlotter(ResetPlotterEvent e)
-    {
-        plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
-        plotter.GetComponent<PathPlotter>().ResetPlotter();
-    }
-
-    private void OnRestartLevel(RestartLevelEvent e)
-    {
-        player.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
-        plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
-        plotter.GetComponent<PathPlotter>().ResetPlotter();
-        plotter.SetActive(false);
+        testEnvironment = true;
+        CreateGrid();
+        SetupLevelElements();
     }
 
     #endregion
@@ -111,8 +51,6 @@ public class LevelManager : MonoBehaviour
         GameObject tile = null;
         GameObject tilePref = null;
 
-        tiles.Clear();
-
         foreach (KeyValuePair<int, TileData> data in tileDataMap)
         {
             tilePref = baseTilePref;
@@ -121,8 +59,6 @@ public class LevelManager : MonoBehaviour
             tile.transform.localPosition = data.Value.tileLocation;
             tile.transform.localScale = Vector3.one;
             tile.transform.localRotation = Quaternion.identity;
-
-            tiles.Add(tile);
 
             data.Value.tileType = TileType.BaseTile;
 
@@ -267,8 +203,6 @@ public class LevelManager : MonoBehaviour
         plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
 
-        plotter.SetActive(false);
-
         for (int i = 0; i < currentLevelDataObj.securityCamsdata.Count; i++)
         {
             GameObject cam = Instantiate(securityCamPref);
@@ -282,8 +216,6 @@ public class LevelManager : MonoBehaviour
             cam.transform.position = currentLevelDataObj.securityCamsdata[i].position;
             cam.transform.rotation = currentLevelDataObj.securityCamsdata[i].rotation;
             cam.transform.localScale = currentLevelDataObj.securityCamsdata[i].scale;
-
-            cam.GetComponent<SecurityCamera>().Initialize();
         }
 
         for (int i = 0; i < currentLevelDataObj.patrollersdata.Count; i++)
@@ -298,8 +230,6 @@ public class LevelManager : MonoBehaviour
             patrol.transform.position = currentLevelDataObj.patrollersdata[i].position;
             patrol.transform.rotation = currentLevelDataObj.patrollersdata[i].rotation;
             patrol.transform.localScale = currentLevelDataObj.patrollersdata[i].scale;
-
-            patrol.GetComponent<PatrollingEnemy>().Initialize();
         }
 
         for (int i = 0; i < currentLevelDataObj.lasersdata.Count; i++)
@@ -312,99 +242,9 @@ public class LevelManager : MonoBehaviour
             laser.transform.position = currentLevelDataObj.lasersdata[i].position;
             laser.transform.rotation = currentLevelDataObj.lasersdata[i].rotation;
             laser.transform.localScale = currentLevelDataObj.lasersdata[i].scale;
-
-            laser.GetComponent<EnemyLaser>().Initialize();
-        }
-    }
-
-    public void ClearLevel()
-    {
-        for (int i = 0; i < tiles.Count; i++)
-        {
-            Destroy(tiles[i]);
-        }
-
-        tiles.Clear();
-        tileDataMap.Clear();
-
-        Destroy(player);
-
-        plotter.GetComponent<PathPlotter>().DestroyPlotterLine();
-        Destroy(plotter);
-
-        SecurityCamera[] cams = FindObjectsOfType<SecurityCamera>();
-
-        for (int i = 0; i < cams.Length; i++)
-        {
-            Destroy(cams[i].gameObject);
-        }
-
-        //Laser data
-        EnemyLaser[] lasers = FindObjectsOfType<EnemyLaser>();
-
-        for (int i = 0; i < lasers.Length; i++)
-        {
-            Destroy(lasers[i].gameObject);
-        }
-
-        //Patrol data
-        PatrollingEnemy[] patrollers = FindObjectsOfType<PatrollingEnemy>();
-
-        for (int i = 0; i < patrollers.Length; i++)
-        {
-            Destroy(patrollers[i].gameObject);
-        }
-
-    }
-
-    private void LoadNextLevel()
-    {
-        currentLevelID++;
-        currentLevelDataObj = Resources.Load<LevelData>(GameConsts.LEVEL_DATA_PATH + currentLevelID);
-
-        if (currentLevelDataObj == null)
-        {
-            Debug.LogError("Level file not found!!");
-            return;
-        }
-        else
-        {
-            ClearLevel();
-            CreateGrid();
-            SetupLevelElements();
-
-            GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.TransitionToNextLevel));
         }
     }
 
     #endregion
 
-}
-
-/// <summary>
-/// The enum denoting the type for a tile
-/// </summary>
-public enum TileType
-{
-    None,
-    BaseTile,
-}
-
-/// <summary>
-/// Class to store the data required for a tile
-/// </summary>
-[System.Serializable]
-public class TileData
-{
-    public int tileID;
-    public TileType tileType;
-    public Vector2 tileLocation;
-
-    public TileData() { }
-
-    public TileData(TileType tileType, Vector2 tileLocation)
-    {
-        this.tileType = tileType;
-        this.tileLocation = tileLocation;
-    }
 }

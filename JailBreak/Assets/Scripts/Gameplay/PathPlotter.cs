@@ -41,7 +41,7 @@ public class PathPlotter : MonoBehaviour
 
     void Update()
     {
-        if (objectInitialized)
+        if (objectInitialized || TestLevelManager.testEnvironment)
         {
             if (Input.GetMouseButtonDown(0))
             {

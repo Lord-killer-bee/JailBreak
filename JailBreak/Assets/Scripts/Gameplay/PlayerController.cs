@@ -50,7 +50,8 @@ public class PlayerController : MonoBehaviour
                 currentPathIndex++;
                 startWaiting = true;
 
-                GameEventManager.Instance.TriggerAsyncEvent(new PlayerMovedToTileEvent(plottedTileIDs[currentPathIndex]));
+                if(!TestLevelManager.testEnvironment)
+                    GameEventManager.Instance.TriggerAsyncEvent(new PlayerMovedToTileEvent(plottedTileIDs[currentPathIndex]));
             }
 
             if (startWaiting)
@@ -85,6 +86,11 @@ public class PlayerController : MonoBehaviour
     {
         plottedPoints = e.plottedPoints;
         plottedTileIDs = e.plottedTileIDs;
+
+        if (TestLevelManager.testEnvironment)
+        {
+            StartTraversal();
+        }
     }
 
     private void OnGameStateChanged(GameStateChangedEvent e)
