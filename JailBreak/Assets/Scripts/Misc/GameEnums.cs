@@ -31,3 +31,10 @@ public enum CameraRotationDirection
     Clockwise,
     Anticlockwise
 }
+
+public enum LaserMoveDirection
+{
+    None,
+    Horizontal,
+    Vertical
+}
