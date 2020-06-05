@@ -18,6 +18,12 @@ public class PatrollingEnemy : MonoBehaviour
     private Vector2 targetPosition;
     private int moveDirection = 1;
 
+    private void Start()
+    {
+        if (TestLevelManager.testEnvironment)
+            Initialize();
+    }
+
     public void Initialize()
     {
         objectInitialized = true;
@@ -35,7 +41,7 @@ public class PatrollingEnemy : MonoBehaviour
 
     private void Update()
     {
-        if (objectInitialized || TestLevelManager.testEnvironment)
+        if (objectInitialized)
         {
             if (currentPathIndex != targetPathIndex)
             {

@@ -15,6 +15,13 @@ public class PathPlotter : MonoBehaviour
     private LineRenderer line;
 
     private List<int> plottedIds = new List<int>();
+    private List<int> currentAllowedTiles = new List<int>();
+
+    private void Start()
+    {
+        if (TestLevelManager.testEnvironment)
+            Initialize();
+    }
 
     public void Initialize()
     {
@@ -41,7 +48,7 @@ public class PathPlotter : MonoBehaviour
 
     void Update()
     {
-        if (objectInitialized || TestLevelManager.testEnvironment)
+        if (objectInitialized)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -73,22 +80,25 @@ public class PathPlotter : MonoBehaviour
                     {
                         TileData tileData = hitsinfo[i].collider.GetComponent<Tile>().tileData;
 
-                        if (plottedIds.Count == 0)
+                        if (currentAllowedTiles.Contains(tileData.tileID))
                         {
-                            GameObject lineObj = Instantiate(plotterLinePref);
-                            line = lineObj.GetComponentInChildren<LineRenderer>();
-                            line.transform.position = Vector3.zero;
-                            line.transform.localScale = Vector3.one;
+                            if (plottedIds.Count == 0)
+                            {
+                                GameObject lineObj = Instantiate(plotterLinePref);
+                                line = lineObj.GetComponentInChildren<LineRenderer>();
+                                line.transform.position = Vector3.zero;
+                                line.transform.localScale = Vector3.one;
 
-                            plottedPoints.Clear();
+                                plottedPoints.Clear();
 
-                            plottedIds.Add(tileData.tileID);
-                            PlotLineToTile(hitsinfo[i].collider.transform.position);
-                        }
-                        else if (plottedIds[plottedIds.Count - 1] != tileData.tileID)
-                        {
-                            plottedIds.Add(tileData.tileID);
-                            PlotLineToTile(hitsinfo[i].collider.transform.position);
+                                plottedIds.Add(tileData.tileID);
+                                PlotLineToTile(hitsinfo[i].collider.transform.position, tileData);
+                            }
+                            else if (plottedIds[plottedIds.Count - 1] != tileData.tileID)
+                            {
+                                plottedIds.Add(tileData.tileID);
+                                PlotLineToTile(hitsinfo[i].collider.transform.position, tileData);
+                            }
                         }
                     }
                 }
@@ -105,7 +115,7 @@ public class PathPlotter : MonoBehaviour
         }
     }
 
-    private void PlotLineToTile(Vector3 position)
+    private void PlotLineToTile(Vector3 position, TileData tileData)
     {
         if (line.positionCount == 0)
         {
@@ -119,5 +129,13 @@ public class PathPlotter : MonoBehaviour
 
         plottedPoints.Add(position);
         line.positionCount++;
+
+        currentAllowedTiles = tileData.neighbouringTiles;
+    }
+
+    public void SetInitialAllowedTiles(int startTileID, List<int> neighbouringTiles)
+    {
+        currentAllowedTiles = neighbouringTiles;
+        currentAllowedTiles.Add(startTileID);
     }
 }

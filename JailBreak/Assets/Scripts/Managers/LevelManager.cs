@@ -126,6 +126,34 @@ public class LevelManager : MonoBehaviour
 
             data.Value.tileType = TileType.BaseTile;
 
+            TileData neighbouringTile = GetLeftTileData(data.Key);
+
+            if(neighbouringTile != null)
+            {
+                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
+            }
+
+            neighbouringTile = GetRightTileData(data.Key);
+
+            if (neighbouringTile != null)
+            {
+                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
+            }
+
+            neighbouringTile = GetTopTileData(data.Key);
+
+            if (neighbouringTile != null)
+            {
+                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
+            }
+
+            neighbouringTile = GetBottomTileData(data.Key);
+
+            if (neighbouringTile != null)
+            {
+                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
+            }
+
             tile.GetComponent<Tile>().tileData = data.Value;
         }
     }
@@ -266,6 +294,7 @@ public class LevelManager : MonoBehaviour
         plotter = Instantiate(plotterPref);
         plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+        plotter.GetComponent<PathPlotter>().SetInitialAllowedTiles(currentLevelDataObj.startTileID, tileDataMap[currentLevelDataObj.startTileID].neighbouringTiles);
 
         plotter.SetActive(false);
 
@@ -399,6 +428,8 @@ public class TileData
     public int tileID;
     public TileType tileType;
     public Vector2 tileLocation;
+
+    public List<int> neighbouringTiles = new List<int>();
 
     public TileData() { }
 

@@ -62,6 +62,34 @@ public class TestLevelManager : MonoBehaviour
 
             data.Value.tileType = TileType.BaseTile;
 
+            TileData neighbouringTile = GetLeftTileData(data.Key);
+
+            if (neighbouringTile != null)
+            {
+                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
+            }
+
+            neighbouringTile = GetRightTileData(data.Key);
+
+            if (neighbouringTile != null)
+            {
+                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
+            }
+
+            neighbouringTile = GetTopTileData(data.Key);
+
+            if (neighbouringTile != null)
+            {
+                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
+            }
+
+            neighbouringTile = GetBottomTileData(data.Key);
+
+            if (neighbouringTile != null)
+            {
+                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
+            }
+
             tile.GetComponent<Tile>().tileData = data.Value;
         }
     }
@@ -202,6 +230,7 @@ public class TestLevelManager : MonoBehaviour
         plotter = Instantiate(plotterPref);
         plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+        plotter.GetComponent<PathPlotter>().SetInitialAllowedTiles(currentLevelDataObj.startTileID, tileDataMap[currentLevelDataObj.startTileID].neighbouringTiles);
 
         for (int i = 0; i < currentLevelDataObj.securityCamsdata.Count; i++)
         {

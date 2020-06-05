@@ -11,15 +11,24 @@ public class SecurityCamera : MonoBehaviour
     [SerializeField] private float cameraPatrolAngle = 120f;
     [SerializeField] private float cameraPatrolSpeed = 30f;
 
+    //[SerializeField] private float waitTime = 1f;
+    //[SerializeField] private CameraMoveDirection[] moveDirections;
+
     [SerializeField] private GameObject camImage;
 
     int rotationDirection = -1;
-    bool objectInitialized = true;
+    bool objectInitialized = false;
 
     private Vector2 leftMargin, rightMargin;
     private Vector2 camMarginOne, camMarginTwo;
 
     bool playerDetected = false;
+
+    private void Start()
+    {
+        if(TestLevelManager.testEnvironment)
+            Initialize();
+    }
 
     public void Initialize()
     {
@@ -32,7 +41,7 @@ public class SecurityCamera : MonoBehaviour
 
     void Update()
     {
-        if (objectInitialized || TestLevelManager.testEnvironment)
+        if (objectInitialized)
         {
             Vector2 rotation;
             if (rotationDirection == 1)

@@ -15,3 +15,12 @@ public enum GameRuleType
     PickKeyThenExit,
     HackStationThenExit
 }
+
+public enum CameraMoveDirection
+{
+    None,
+    Left,
+    Right,
+    Top,
+    Bottom
+}
