@@ -6,22 +6,16 @@ using Core;
 
 public class SecurityCamera : MonoBehaviour
 {
-    [SerializeField] private float detectionArcRadius = 3f;
-    [SerializeField] private float detectionArcAngle = 30f;
-    [SerializeField] private float cameraPatrolAngle = 120f;
-    [SerializeField] private float cameraPatrolSpeed = 30f;
-
-    //[SerializeField] private float waitTime = 1f;
-    //[SerializeField] private CameraMoveDirection[] moveDirections;
+    [SerializeField] private float waitTime = 1f;
+    [SerializeField] private List<CameraMoveLocation> moveLocations;
+    [SerializeField] private CameraMoveLocation startLocation = CameraMoveLocation.Top;
+    [SerializeField] private CameraRotationDirection rotationDirection = CameraRotationDirection.Clockwise;
 
     [SerializeField] private GameObject camImage;
 
-    int rotationDirection = -1;
+    CameraMoveLocation currentLocation;
+    DateTime waitStartedTime;
     bool objectInitialized = false;
-
-    private Vector2 leftMargin, rightMargin;
-    private Vector2 camMarginOne, camMarginTwo;
-
     bool playerDetected = false;
 
     private void Start()
@@ -32,117 +26,132 @@ public class SecurityCamera : MonoBehaviour
 
     public void Initialize()
     {
-        leftMargin = Quaternion.AngleAxis((cameraPatrolAngle / 2) - (detectionArcAngle / 2), Vector3.forward) * camImage.transform.up;
-        rightMargin = Quaternion.AngleAxis(-((cameraPatrolAngle / 2) - (detectionArcAngle / 2)), Vector3.forward) * camImage.transform.up;
-
         objectInitialized = true;
         playerDetected = false;
+        waitStartedTime = DateTime.Now;
+
+        currentLocation = startLocation;
+        camImage.transform.localEulerAngles = GetRotationForDirection(currentLocation);
     }
 
     void Update()
     {
+        if (moveLocations.Count == 0)
+            return;
+
         if (objectInitialized)
         {
-            Vector2 rotation;
-            if (rotationDirection == 1)
+            if ((DateTime.Now - waitStartedTime).TotalMilliseconds >= waitTime * 1000)
             {
-                rotation = Vector3.RotateTowards(camImage.transform.up, rightMargin, cameraPatrolSpeed * Time.deltaTime, 0.0f);
+                currentLocation = GetNextMoveDirection(currentLocation, rotationDirection);
+                camImage.transform.localEulerAngles = GetRotationForDirection(currentLocation);
+                waitStartedTime = DateTime.Now;
             }
-            else
-            {
-                rotation = Vector3.RotateTowards(camImage.transform.up, leftMargin, cameraPatrolSpeed * Time.deltaTime, 0.0f);
-            }
-
-            camImage.transform.up = rotation;
-
-            if (rotationDirection == 1)
-            {
-                if (Vector3.Angle(rotation, rightMargin) <= 0.3f)
-                    rotationDirection = -1;
-            }
-            else
-            {
-                if (Vector3.Angle(rotation, leftMargin) < 0.3f)
-                    rotationDirection = 1;
-            }
-
-            RecalculateMargins();
-
-            if(!playerDetected)
-                DetectIfPlayerinFOW();
         }
     }
 
-    private void RecalculateMargins()
+    public CameraMoveLocation GetNextMoveDirection(CameraMoveLocation currentDirection, CameraRotationDirection rotationDirection)
     {
-        camMarginOne = Quaternion.AngleAxis((detectionArcAngle / 2), Vector3.forward) * camImage.transform.up;
-        camMarginTwo = Quaternion.AngleAxis(-(detectionArcAngle / 2), Vector3.forward) * camImage.transform.up;
-    }
+        CameraMoveLocation result = CameraMoveLocation.None;
 
-    private void DetectIfPlayerinFOW()
-    {
-        Collider2D target = Physics2D.OverlapCircle(transform.position, detectionArcRadius, GameConsts.PLAYER_LAYER_MASK);
-
-        if (target)
+        switch (currentDirection)
         {
-            Vector2 dir = target.transform.position - transform.position;
-
-            float angle1 = Vector2.Angle(camMarginOne, dir);
-            float angle2 = Vector2.Angle(camMarginTwo, dir);
-
-            if (Vector2.Angle(camMarginOne, dir) < detectionArcAngle && Vector2.Angle(camMarginTwo, dir) < detectionArcAngle)
-            {
-                GameEventManager.Instance.TriggerSyncEvent(new PlayerDetectedEvent());
-                playerDetected = true;
-            }
+            case CameraMoveLocation.Left:
+                if (rotationDirection == CameraRotationDirection.Clockwise)
+                    result = CameraMoveLocation.Top;
+                else
+                    result = CameraMoveLocation.Bottom;
+                break;
+            case CameraMoveLocation.Right:
+                if (rotationDirection == CameraRotationDirection.Clockwise)
+                    result = CameraMoveLocation.Bottom;
+                else
+                    result = CameraMoveLocation.Top;
+                break;
+            case CameraMoveLocation.Top:
+                if (rotationDirection == CameraRotationDirection.Clockwise)
+                    result = CameraMoveLocation.Right;
+                else
+                    result = CameraMoveLocation.Left;
+                break;
+            case CameraMoveLocation.Bottom:
+                if (rotationDirection == CameraRotationDirection.Clockwise)
+                    result = CameraMoveLocation.Left;
+                else
+                    result = CameraMoveLocation.Right;
+                break;
         }
+
+        if (!moveLocations.Contains(result))
+        {
+            result = GetNextMoveDirection(result, rotationDirection);
+        }
+
+        return result;
+    }
+
+    public Vector3 GetRotationForDirection(CameraMoveLocation moveDirection)
+    {
+        switch (moveDirection)
+        {
+            case CameraMoveLocation.Left:
+                return new Vector3(0, 0, 90);
+            case CameraMoveLocation.Right:
+                return new Vector3(0, 0, -90);
+            case CameraMoveLocation.Top:
+                return Vector3.zero;
+            case CameraMoveLocation.Bottom:
+                return new Vector3(0, 0, 180);
+        }
+
+        return Vector3.zero;
     }
 
     #region Getters and setters
 
-    public float GetDetectionArcRadius()
-    {
-        return detectionArcRadius;
-    }
-
-    public float GetDetectionArcAngle()
-    {
-        return detectionArcAngle;
-    }
-
-    public float GetCameraPatrolAngle()
-    {
-        return cameraPatrolAngle;
-    }
-
-    public float GetCameraPatrolSpeed()
-    {
-        return cameraPatrolSpeed;
-    }
-
-    public void SetDetectionArcRadius(float detectionArcRadius)
-    {
-        this.detectionArcRadius = detectionArcRadius;
-    }
-
-    public void SetDetectionArcAngle(float detectionArcAngle)
-    {
-        this.detectionArcAngle = detectionArcAngle;
-    }
-
-    public void SetCameraPatrolAngle(float cameraPatrolAngle)
-    {
-        this.cameraPatrolAngle = cameraPatrolAngle;
-    }
-
-    public void SetCameraPatrolSpeed(float cameraPatrolSpeed)
-    {
-        this.cameraPatrolSpeed = cameraPatrolSpeed;
-    }
-
     public Transform GetCamImageTransform()
     {
         return camImage.transform;
+    }
+
+    public float GetWaitTime()
+    { 
+        return waitTime;
+    }
+
+    public List<CameraMoveLocation> GetMoveLocations()
+    {
+        return moveLocations;
+    }
+
+    public CameraMoveLocation GetStartLocation()
+    {
+        return startLocation;
+    }
+
+    public CameraRotationDirection GetRotationDirection()
+    {
+        return rotationDirection;
+    }
+
+    public void SetWaitTime(float waitTime)
+    {
+        this.waitTime = waitTime;
+    }
+
+    public void SetMoveLocations(List<CameraMoveLocation> moveLocations)
+    {
+        this.moveLocations = moveLocations;
+    }
+
+    public void SetStartLocation(CameraMoveLocation startLocation)
+    {
+        this.startLocation = startLocation;
+    }
+
+    public void SetRotationDirection(CameraRotationDirection rotationDirection)
+    {
+        this.rotationDirection = rotationDirection;
     }
 
     #endregion
@@ -151,10 +160,11 @@ public class SecurityCamera : MonoBehaviour
 [System.Serializable]
 public class SecurityCamDataUnit
 {
-    public float detectionArcRadius;
-    public float detectionArcAngle;
-    public float cameraPatrolAngle;
-    public float cameraPatrolSpeed;
+    public float waitTime;
+    public List<CameraMoveLocation> moveLocations;
+    public CameraMoveLocation startLocation;
+    public CameraRotationDirection rotationDirection;
+
 
     public Vector2 position;
     public Quaternion rotation;

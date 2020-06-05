@@ -16,11 +16,18 @@ public enum GameRuleType
     HackStationThenExit
 }
 
-public enum CameraMoveDirection
+public enum CameraMoveLocation
 {
     None,
     Left,
     Right,
     Top,
     Bottom
+}
+
+public enum CameraRotationDirection
+{
+    None,
+    Clockwise,
+    Anticlockwise
 }

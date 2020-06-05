@@ -303,10 +303,10 @@ public class LevelManager : MonoBehaviour
             GameObject cam = Instantiate(securityCamPref);
             SecurityCamera camComp = cam.GetComponent<SecurityCamera>();
 
-            camComp.SetCameraPatrolAngle(currentLevelDataObj.securityCamsdata[i].cameraPatrolAngle);
-            camComp.SetCameraPatrolSpeed(currentLevelDataObj.securityCamsdata[i].cameraPatrolSpeed);
-            camComp.SetDetectionArcAngle(currentLevelDataObj.securityCamsdata[i].detectionArcAngle);
-            camComp.SetDetectionArcRadius(currentLevelDataObj.securityCamsdata[i].detectionArcRadius);
+            camComp.SetWaitTime(currentLevelDataObj.securityCamsdata[i].waitTime);
+            camComp.SetMoveLocations(currentLevelDataObj.securityCamsdata[i].moveLocations);
+            camComp.SetStartLocation(currentLevelDataObj.securityCamsdata[i].startLocation);
+            camComp.SetRotationDirection(currentLevelDataObj.securityCamsdata[i].rotationDirection);
 
             cam.transform.position = currentLevelDataObj.securityCamsdata[i].position;
             cam.transform.rotation = currentLevelDataObj.securityCamsdata[i].rotation;

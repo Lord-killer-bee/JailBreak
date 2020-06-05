@@ -183,10 +183,10 @@ public class LevelEditor : EditorWindow
             GameObject cam = objectGenerator.CreateSecurityCam();
             SecurityCamera camComp = cam.GetComponent<SecurityCamera>();
 
-            camComp.SetCameraPatrolAngle(loadLevelData.securityCamsdata[i].cameraPatrolAngle);
-            camComp.SetCameraPatrolSpeed(loadLevelData.securityCamsdata[i].cameraPatrolSpeed);
-            camComp.SetDetectionArcAngle(loadLevelData.securityCamsdata[i].detectionArcAngle);
-            camComp.SetDetectionArcRadius(loadLevelData.securityCamsdata[i].detectionArcRadius);
+            camComp.SetWaitTime(loadLevelData.securityCamsdata[i].waitTime);
+            camComp.SetMoveLocations(loadLevelData.securityCamsdata[i].moveLocations);
+            camComp.SetStartLocation(loadLevelData.securityCamsdata[i].startLocation);
+            camComp.SetRotationDirection(loadLevelData.securityCamsdata[i].rotationDirection);
 
             cam.transform.position = loadLevelData.securityCamsdata[i].position;
             cam.transform.rotation = loadLevelData.securityCamsdata[i].rotation;
@@ -242,10 +242,10 @@ public class LevelEditor : EditorWindow
         for (int i = 0; i < cams.Count; i++)
         {
             levelData.securityCamsdata.Add(new SecurityCamDataUnit());
-            levelData.securityCamsdata[i].cameraPatrolAngle = cams[i].GetCameraPatrolAngle();
-            levelData.securityCamsdata[i].cameraPatrolSpeed = cams[i].GetCameraPatrolSpeed();
-            levelData.securityCamsdata[i].detectionArcAngle = cams[i].GetDetectionArcAngle();
-            levelData.securityCamsdata[i].detectionArcRadius = cams[i].GetDetectionArcRadius();
+            levelData.securityCamsdata[i].waitTime = cams[i].GetWaitTime();
+            levelData.securityCamsdata[i].moveLocations = cams[i].GetMoveLocations();
+            levelData.securityCamsdata[i].startLocation = cams[i].GetStartLocation();
+            levelData.securityCamsdata[i].rotationDirection = cams[i].GetRotationDirection();
 
             levelData.securityCamsdata[i].position = cams[i].transform.position;
             levelData.securityCamsdata[i].rotation = cams[i].transform.rotation;

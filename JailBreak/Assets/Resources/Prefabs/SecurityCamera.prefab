@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6044884542995189237}
   - component: {fileID: 6044884542995189234}
+  - component: {fileID: 8005908551349532097}
+  - component: {fileID: 2433579837756803952}
+  - component: {fileID: 453977029}
   m_Layer: 0
   m_Name: Img
   m_TagString: Untagged
@@ -79,6 +82,65 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &8005908551349532097
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6044884542995189235}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.10414767, y: 2.9508553}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.08, y: 1.81}
+    newSize: {x: 2.08, y: 1.81}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 8.676025, y: 2.7126179}
+  m_EdgeRadius: 0
+--- !u!114 &2433579837756803952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6044884542995189235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa984682a3d580143809c02fcf193494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!50 &453977029
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6044884542995189235}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &6044884542999835482
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,8 +185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c447c26842c148d4d8427159f2ab6796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionArcRadius: 3
-  detectionArcAngle: 30
-  cameraPatrolAngle: 120
-  cameraPatrolSpeed: 0.5
+  waitTime: 1
+  moveLocations: 
+  startLocation: 3
+  rotationDirection: 1
   camImage: {fileID: 6044884542995189235}
