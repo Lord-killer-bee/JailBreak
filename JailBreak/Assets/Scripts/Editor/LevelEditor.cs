@@ -18,14 +18,17 @@ public class LevelEditor : EditorWindow
 
     public GameRuleType ruleType;
 
-    public List<int> wallTileIds;
+    public WallTileType wallTileName;
 
     private int levelID;
     private LevelData levelData;
-
     private LevelData loadLevelData;
-
     private LevelEditorObjectGenerator objectGenerator;
+
+    private bool tilePickerEnabled = false;
+    private bool clearTile = false;
+
+    private Dictionary<int, WallTileType> tilesMapped = new Dictionary<int, WallTileType>();
 
     [MenuItem("Window/Level editor")]
     private static void OpenWindow()
@@ -37,6 +40,38 @@ public class LevelEditor : EditorWindow
     private void OnEnable()
     {
         objectGenerator = GameObject.FindObjectOfType<LevelEditorObjectGenerator>();
+    }
+
+    [ExecuteInEditMode]
+    private void Update()
+    {
+        if (tilePickerEnabled)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                tilePickerEnabled = false;
+
+                //Raycast to get tile ID
+                RaycastHit2D[] hitsinfo = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, 100f);
+
+                for (int i = 0; i < hitsinfo.Length; i++)
+                {
+                    if (hitsinfo[i].collider.tag == GameConsts.BASETILE_TAG)
+                    {
+                        if (!clearTile)
+                        {
+                            tilesMapped.Add(hitsinfo[i].collider.GetComponent<Tile>().tileData.tileID, wallTileName);
+                            objectGenerator.CreateWallTile(wallTileName, hitsinfo[i].collider.GetComponent<Tile>().tileData.tileID);
+                        }
+                        else
+                        {
+                            tilesMapped.Remove(hitsinfo[i].collider.GetComponent<Tile>().tileData.tileID);
+                            objectGenerator.ClearWallTile(hitsinfo[i].collider.GetComponent<Tile>().tileData.tileID);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void OnGUI()
@@ -88,10 +123,25 @@ public class LevelEditor : EditorWindow
         //Wall tiles
         EditorGUILayout.HelpBox("Select wall tiles", MessageType.Info);
 
-        SerializedProperty serialProp = serialObj.FindProperty("wallTileIds");
+        //SerializedProperty serialProp = serialObj.FindProperty("wallTileIds");
+
+        //EditorGUILayout.PropertyField(serialProp, true);
+        //serialObj.ApplyModifiedProperties();
+
+        SerializedProperty serialProp = serialObj.FindProperty("wallTileName");
 
         EditorGUILayout.PropertyField(serialProp, true);
         serialObj.ApplyModifiedProperties();
+
+        if (GUILayout.Button("Pick tile"))
+        {
+            EnableTilePicker(false);
+        }
+
+        if (GUILayout.Button("Clear tile"))
+        {
+            EnableTilePicker(true);
+        }
 
         //Enemy selection
         EditorGUILayout.HelpBox("Create enemies using buttons", MessageType.Info);
@@ -129,6 +179,12 @@ public class LevelEditor : EditorWindow
         {
             LoadTheLevel();
         }
+    }
+
+    private void EnableTilePicker(bool clearTile)
+    {
+        tilePickerEnabled = true;
+        this.clearTile = clearTile;
     }
 
     private void CreateNewLaser()
@@ -176,7 +232,7 @@ public class LevelEditor : EditorWindow
         keyTileID = loadLevelData.keyTileID;
         stationTileID = loadLevelData.stationTileID;
 
-        wallTileIds = loadLevelData.wallTileIds;
+        tilesMapped = loadLevelData.wallTiles;
 
         for (int i = 0; i < loadLevelData.securityCamsdata.Count; i++)
         {
@@ -233,7 +289,7 @@ public class LevelEditor : EditorWindow
         levelData.stationTileID = stationTileID;
         levelData.ruleType = ruleType;
 
-        levelData.wallTileIds = wallTileIds;
+        levelData.wallTiles = tilesMapped;
 
         //Security cam data
         List<SecurityCamera> cams = FindObjectsOfType<SecurityCamera>().ToList();

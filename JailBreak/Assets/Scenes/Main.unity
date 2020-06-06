@@ -153,8 +153,6 @@ MonoBehaviour:
     type: 3}
   laserPref: {fileID: 3278161375871288815, guid: 5fa5b0280c6774a41ab08c078e552ec2,
     type: 3}
-  currentLevelDataObj: {fileID: 11400000, guid: 83d98c709fdf27f4694c6ce425a4aeff,
-    type: 2}
 --- !u!4 &61957494
 Transform:
   m_ObjectHideFlags: 0

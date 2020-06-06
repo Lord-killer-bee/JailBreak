@@ -39,12 +39,13 @@ public class PlayerController : MonoBehaviour
     {
         if (startTraversal)
         {
-            if(currentPathIndex < targetPathIndex)
+            if (currentPathIndex < targetPathIndex)
             {
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+                //transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+                transform.position = targetPosition;
             }
 
-            if(Vector3.Distance(transform.position, targetPosition) == 0 && !startWaiting)
+            if (Vector3.Distance(transform.position, targetPosition) == 0 && !startWaiting)
             {
                 delayStartTime = DateTime.Now;
                 currentPathIndex++;
@@ -62,11 +63,14 @@ public class PlayerController : MonoBehaviour
                     startWaiting = false;
 
                     if (targetPathIndex < plottedPoints.Count)
+                    {
                         targetPosition = plottedPoints[targetPathIndex];
+
+                    }
                 }
             }
 
-            if (currentPathIndex >= plottedPoints.Count)
+            if (currentPathIndex >= plottedPoints.Count - 1)
             {
                 startTraversal = false;
             }

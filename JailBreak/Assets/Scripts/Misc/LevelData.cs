@@ -16,7 +16,7 @@ public class LevelData : ScriptableObject
 
     public GameRuleType ruleType;
 
-    public List<int> wallTileIds;
+    public Dictionary<int, WallTileType> wallTiles = new Dictionary<int, WallTileType>();
 
     public List<SecurityCamDataUnit> securityCamsdata = new List<SecurityCamDataUnit>(); 
     public List<EnemyLaserDataUnit> lasersdata = new List<EnemyLaserDataUnit>(); 

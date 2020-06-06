@@ -20,10 +20,6 @@ public class EnemyLaserGizmo : Editor
     {
         recievedEnds = targetObject.GetLaserEndPositions();
 
-        Handles.color = new Color(1.0f, 0f, 0f, 1f);
-
-        Handles.DrawAAPolyLine(20.0f, recievedEnds);
-
         for (int i = 0; i < laserEnds.Length; i++)
         {
             laserEnds[i] = recievedEnds[i] - targetObject.transform.position;
@@ -31,5 +27,9 @@ public class EnemyLaserGizmo : Editor
 
         EdgeCollider2D collider = targetObject.GetComponent<EdgeCollider2D>();
         collider.points = laserEnds;
+
+        LineRenderer line = targetObject.GetComponent<LineRenderer>();
+        line.positionCount = 2;
+        line.SetPositions(recievedEnds);
     }
 }

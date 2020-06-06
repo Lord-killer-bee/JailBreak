@@ -38,3 +38,10 @@ public enum LaserMoveDirection
     Horizontal,
     Vertical
 }
+
+public enum WallTileType
+{
+    Type1,
+    Type2,
+    Type3
+}

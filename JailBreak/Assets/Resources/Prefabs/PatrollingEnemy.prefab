@@ -101,6 +101,7 @@ MonoBehaviour:
   - {x: -1.510315, y: 0.5162606, z: 0}
   moveSpeed: 3
   detectionTileRange: 3
+  waitTime: 1
 --- !u!61 &8536263719700830269
 BoxCollider2D:
   m_ObjectHideFlags: 0
