@@ -17,6 +17,8 @@ public class SecurityCamera : MonoBehaviour
     DateTime waitStartedTime;
     bool objectInitialized = false;
     bool playerDetected = false;
+    bool waitStarted = false;
+    float waitUnits = 0;
 
     private void Start()
     {
@@ -28,24 +30,41 @@ public class SecurityCamera : MonoBehaviour
     {
         objectInitialized = true;
         playerDetected = false;
+
         waitStartedTime = DateTime.Now;
+        waitStarted = true;
+        waitUnits = waitTime;
 
         currentLocation = startLocation;
         camImage.transform.localEulerAngles = GetRotationForDirection(currentLocation);
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (moveLocations.Count == 0)
             return;
 
         if (objectInitialized)
         {
-            if ((DateTime.Now - waitStartedTime).TotalMilliseconds >= waitTime * 1000)
+            //if ((DateTime.Now - waitStartedTime).TotalMilliseconds >= waitTime * 1000)
+            if (GameTimer.GameTicked)
+            {
+                if (waitStarted)
+                {
+                    waitUnits--;
+
+                    if (waitUnits <= 0)
+                        waitStarted = false;
+                }
+            }
+
+            if(!waitStarted)
             {
                 currentLocation = GetNextMoveDirection(currentLocation, rotationDirection);
                 camImage.transform.localEulerAngles = GetRotationForDirection(currentLocation);
                 waitStartedTime = DateTime.Now;
+                waitStarted = true;
+                waitUnits = waitTime;
             }
         }
     }

@@ -1121,6 +1121,7 @@ GameObject:
   - component: {fileID: 533666705}
   - component: {fileID: 533666704}
   - component: {fileID: 533666703}
+  - component: {fileID: 533666706}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1192,6 +1193,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &533666706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533666702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff6de7918cf8add46befae319dd3add3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &558939367
 GameObject:
   m_ObjectHideFlags: 0
@@ -3426,14 +3439,14 @@ PrefabInstance:
       propertyPath: waypoints.Array.data[2].z
       value: -2
       objectReference: {fileID: 0}
-    - target: {fileID: 9152792270325536607, guid: 5fa5b0280c6774a41ab08c078e552ec2,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 496638833626166340, guid: 5fa5b0280c6774a41ab08c078e552ec2,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9152792270325536607, guid: 5fa5b0280c6774a41ab08c078e552ec2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

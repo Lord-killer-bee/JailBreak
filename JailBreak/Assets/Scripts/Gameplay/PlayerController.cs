@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public List<int> plottedTileIDs;
     bool startTraversal = false;
     bool startWaiting = false;
+    float waitUnits = 0;
 
     int currentPathIndex = 0;
     int targetPathIndex = 0;
@@ -35,11 +36,11 @@ public class PlayerController : MonoBehaviour
         GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetected);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (startTraversal)
         {
-            if (currentPathIndex < targetPathIndex)
+            if (currentPathIndex < targetPathIndex && !startWaiting)
             {
                 //transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
                 transform.position = targetPosition;
@@ -57,7 +58,19 @@ public class PlayerController : MonoBehaviour
 
             if (startWaiting)
             {
-                if ((DateTime.Now - delayStartTime).TotalMilliseconds >= moveWaitTime * 1000)
+                //if ((DateTime.Now - delayStartTime).TotalMilliseconds >= moveWaitTime * 1000)
+                if (GameTimer.GameTicked)
+                {
+                    if (startWaiting)
+                    {
+                        waitUnits--;
+
+                        if (waitUnits <= 0)
+                            startWaiting = false;
+                    }
+                }
+
+                if(!startWaiting)
                 {
                     targetPathIndex++;
                     startWaiting = false;
@@ -81,7 +94,10 @@ public class PlayerController : MonoBehaviour
     {
         startTraversal = true;
         currentPathIndex = 0;
-        targetPathIndex = 1;
+        targetPathIndex = 0;
+
+        startWaiting = true;
+        waitUnits = moveWaitTime;
 
         targetPosition = plottedPoints[targetPathIndex];
     }

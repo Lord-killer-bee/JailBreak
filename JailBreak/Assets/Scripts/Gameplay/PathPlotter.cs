@@ -7,6 +7,7 @@ using Core;
 public class PathPlotter : MonoBehaviour
 {
     [SerializeField] private GameObject plotterLinePref;
+    [SerializeField] private GameObject markerPref;
 
     private List<Vector2> plottedPoints = new List<Vector2>();
     bool plotterPicked = false;
@@ -126,6 +127,8 @@ public class PathPlotter : MonoBehaviour
         {
             line.SetPosition(line.positionCount - 1, position);
         }
+
+        Instantiate(markerPref, position, Quaternion.identity);
 
         plottedPoints.Add(position);
         line.positionCount++;

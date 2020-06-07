@@ -16,6 +16,7 @@ public class EnemyLaserEnd : MonoBehaviour
     private int moveDirection = 1;
     private bool startWaiting = false;
     private DateTime delayStartTime;
+    float waitUnits = 0;
 
     private void Start()
     {
@@ -28,21 +29,24 @@ public class EnemyLaserEnd : MonoBehaviour
         objectInitialized = true;
 
         currentPathIndex = 0;
-        targetPathIndex = 1;
+        targetPathIndex = 0;
 
         moveDirection = 1;
+
+        startWaiting = true;
+        waitUnits = waitTime;
 
         transform.position = waypoints[currentPathIndex];
         targetPosition = waypoints[targetPathIndex];
 
-        transform.up = (targetPosition - transform.position).normalized;
+        transform.up = (waypoints[currentPathIndex + 1] - transform.position).normalized;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (objectInitialized)
         {
-            if (currentPathIndex != targetPathIndex)
+            if (currentPathIndex != targetPathIndex && !startWaiting)
             {
                 //transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
                 transform.position = targetPosition;
@@ -51,7 +55,7 @@ public class EnemyLaserEnd : MonoBehaviour
             if (Vector3.Distance(transform.position, targetPosition) == 0 && !startWaiting)
             {
                 startWaiting = true;
-                delayStartTime = DateTime.Now;
+                //delayStartTime = DateTime.Now;
 
                 if (moveDirection == 1)
                 {
@@ -77,12 +81,23 @@ public class EnemyLaserEnd : MonoBehaviour
                 }
             }
 
+
             if (startWaiting)
             {
-                if ((DateTime.Now - delayStartTime).TotalMilliseconds >= waitTime * 1000)
+                //if ((DateTime.Now - delayStartTime).TotalMilliseconds >= waitTime * 1000)
+                if (GameTimer.GameTicked)
                 {
-                    startWaiting = false;
+                    if (startWaiting)
+                    {
+                        waitUnits--;
 
+                        if (waitUnits <= 0)
+                            startWaiting = false;
+                    }
+                }
+
+                if(!startWaiting)
+                {
                     if (moveDirection == 1)
                     {
                         targetPathIndex++;
