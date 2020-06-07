@@ -2723,7 +2723,7 @@ MonoBehaviour:
   plotterPref: {fileID: 6106118680723158114, guid: 02769a6aaf24da4489b7614ea8bd0c99,
     type: 3}
   wallTilePrefs: []
-  startTileID: 0
+  startTileID: 96
   securityCamPref: {fileID: 6044884542999835482, guid: 90a4e4d1aa20d8d4489276c4c2b4f380,
     type: 3}
   patrolPref: {fileID: 8536263719700830257, guid: 8d90f5873797b204aae52924f3963302,

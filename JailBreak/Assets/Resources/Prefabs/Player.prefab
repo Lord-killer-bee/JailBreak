@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  moveWaitTime: 0.7
+  moveWaitTime: 1
   plottedTileIDs: 
 --- !u!58 &9041076973842784729
 CircleCollider2D:
