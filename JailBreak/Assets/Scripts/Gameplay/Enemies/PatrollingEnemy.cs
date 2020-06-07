@@ -20,10 +20,11 @@ public class PatrollingEnemy : MonoBehaviour
     private int moveDirection = 1;
     private bool startWaiting = false;
     private DateTime delayStartTime;
+    private bool reachedEnd = false;
 
     private void Start()
     {
-        if (TestLevelManager.testEnvironment)
+        //if (TestLevelManager.testEnvironment)
             Initialize();
     }
 
@@ -69,8 +70,9 @@ public class PatrollingEnemy : MonoBehaviour
                 if (currentPathIndex == waypoints.Length - 1 || currentPathIndex == 0)
                 {
                     moveDirection *= -1;
+                    reachedEnd = true;
 
-                    if(moveDirection == 1)
+                    if (moveDirection == 1)
                     {
                         currentPathIndex = 0;
                     }
@@ -79,12 +81,32 @@ public class PatrollingEnemy : MonoBehaviour
                         currentPathIndex = waypoints.Length - 1;
                     }
                 }
+                else
+                    reachedEnd = false;
             }
 
             if (startWaiting)
             {
                 if ((DateTime.Now - delayStartTime).TotalMilliseconds >= waitTime * 1000)
                 {
+                    if (reachedEnd)
+                    {
+                        startWaiting = true;
+                        delayStartTime = DateTime.Now;
+                        reachedEnd = false;
+
+                        if(moveDirection == 1)
+                        {
+                            transform.up = ((Vector2)waypoints[currentPathIndex + 1] - (Vector2)transform.position).normalized;
+                        }
+                        else
+                        {
+                            transform.up = ((Vector2)waypoints[currentPathIndex - 1] - (Vector2)transform.position).normalized;
+                        }
+
+                        return;
+                    }
+
                     startWaiting = false;
 
                     if (moveDirection == 1)
