@@ -26,6 +26,18 @@ public class EnemyLaser : MonoBehaviour
         laserEnds[1].GetComponent<EnemyLaserEnd>().Initialize();
     }
 
+    private void OnEnable()
+    {
+        GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
+        GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
+    }
+
+    private void OnDisable()
+    {
+        GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
+        GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
+    }
+
     private void Update()
     {
         LineRenderer line = GetComponent<LineRenderer>();
@@ -42,6 +54,23 @@ public class EnemyLaser : MonoBehaviour
         }
     }
 
+    private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
+    {
+        if (TestLevelManager.testEnvironment)
+        {
+            laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
+            laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
+        }
+    }
+
+    private void OnGameStateChanged(GameStateChangedEvent e)
+    {
+        if (e.stateType == GameStateType.SimulateLevel)
+        {
+            laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
+            laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
+        }
+    }
 
     #region Getters and Setters
 

@@ -26,6 +26,18 @@ public class SecurityCamera : MonoBehaviour
             Initialize();
     }
 
+    private void OnEnable()
+    {
+        GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
+        GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
+    }
+
+    private void OnDisable()
+    {
+        GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
+        GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
+    }
+
     public void Initialize()
     {
         objectInitialized = true;
@@ -67,6 +79,28 @@ public class SecurityCamera : MonoBehaviour
                 waitUnits = waitTime;
             }
         }
+    }
+
+    private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
+    {
+        if (TestLevelManager.testEnvironment)
+            ResetEnemy();
+    }
+
+    private void OnGameStateChanged(GameStateChangedEvent e)
+    {
+        if(e.stateType == GameStateType.SimulateLevel)
+            ResetEnemy();
+    }
+
+    void ResetEnemy()
+    {
+        waitStartedTime = DateTime.Now;
+        waitStarted = true;
+        waitUnits = waitTime;
+
+        currentLocation = startLocation;
+        camImage.transform.localEulerAngles = GetRotationForDirection(currentLocation);
     }
 
     public CameraMoveLocation GetNextMoveDirection(CameraMoveLocation currentDirection, CameraRotationDirection rotationDirection)

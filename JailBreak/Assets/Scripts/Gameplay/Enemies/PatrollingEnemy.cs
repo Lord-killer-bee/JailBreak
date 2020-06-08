@@ -29,6 +29,18 @@ public class PatrollingEnemy : MonoBehaviour
             Initialize();
     }
 
+    private void OnEnable()
+    {
+        GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
+        GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
+    }
+
+    private void OnDisable()
+    {
+        GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
+        GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
+    }
+
     public void Initialize()
     {
         objectInitialized = true;
@@ -162,6 +174,34 @@ public class PatrollingEnemy : MonoBehaviour
             GameEventManager.Instance.TriggerSyncEvent(new PlayerDetectedEvent());
             playerDetected = true;
         }
+    }
+
+    private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
+    {
+        if (TestLevelManager.testEnvironment)
+            ResetEnemy();
+    }
+
+    private void OnGameStateChanged(GameStateChangedEvent e)
+    {
+        if (e.stateType == GameStateType.SimulateLevel)
+            ResetEnemy();
+    }
+
+    private void ResetEnemy()
+    {
+        currentPathIndex = 0;
+        targetPathIndex = 0;
+
+        startWaiting = true;
+        waitUnits = waitTime;
+
+        moveDirection = 1;
+
+        transform.position = waypoints[currentPathIndex];
+        targetPosition = waypoints[targetPathIndex];
+
+        transform.up = (waypoints[currentPathIndex + 1] - transform.position).normalized;
     }
 
     #region Getters and Setters

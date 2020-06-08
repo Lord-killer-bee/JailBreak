@@ -128,6 +128,22 @@ public class EnemyLaserEnd : MonoBehaviour
         }
     }
 
+    public void ResetLaser()
+    {
+        currentPathIndex = 0;
+        targetPathIndex = 0;
+
+        moveDirection = 1;
+
+        startWaiting = true;
+        waitUnits = waitTime;
+
+        transform.position = waypoints[currentPathIndex];
+        targetPosition = waypoints[targetPathIndex];
+
+        transform.up = (waypoints[currentPathIndex + 1] - transform.position).normalized;
+    }
+
     public Vector3[] GetWayPoints()
     {
         return waypoints;
