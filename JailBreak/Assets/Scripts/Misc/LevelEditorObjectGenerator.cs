@@ -3,16 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Holds the level data required by the main level manager
+/// Accompanying script for Level editor script to generate objects
+/// Keep one copy for every level scene generated
+/// </summary>
 public class LevelEditorObjectGenerator : MonoBehaviour
 {
-    #region Grid generation
-
     [SerializeField] private GameObject baseTilePref;
     [SerializeField] private GameObject playerPref;
     [SerializeField] private GameObject plotterPref;
-    [SerializeField] private GameObject[] wallTilePrefs;
-    [SerializeField] private int startTileID;
 
+    [SerializeField] private GameObject securityCamPref;
+    [SerializeField] private GameObject patrolPref;
+    [SerializeField] private GameObject laserPref;
+
+    [Space(10)]
+    [Header("Level related")]
+    [SerializeField] private LevelData levelData;
 
     private Dictionary<int, TileData> tileDataMap = new Dictionary<int, TileData>();
 
@@ -20,28 +28,45 @@ public class LevelEditorObjectGenerator : MonoBehaviour
 
     private GameObject player, plotter;
 
-    private int rowCount;
-    private int columnCount;
-
-    private void Awake()
-    {
-        TestLevelManager.testEnvironment = true;
-    }
+    #region Gameplay related (For test scenes)
 
     private void Start()
     {
-        tileDataMap.Clear();
-
-        Tile[] tiles = FindObjectsOfType<Tile>();
-
-        for (int i = 0; i < tiles.Length; i++)
+        if (TestController.testEnvironment)
         {
-            tileDataMap.Add(tiles[i].tileData.tileID, tiles[i].tileData);
-        }
+            tileDataMap.Clear();
 
-        SetupLevelElements();
+            Tile[] tiles = FindObjectsOfType<Tile>();
+
+            for (int i = 0; i < tiles.Length; i++)
+            {
+                tileDataMap.Add(tiles[i].tileData.tileID, tiles[i].tileData);
+            }
+
+            SetupLevelElements();
+        }
     }
 
+    private void SetupLevelElements()
+    {
+        player = Instantiate(playerPref);
+        player.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        player.transform.position = tileDataMap[levelData.startTileID].tileLocation;
+
+        plotter = Instantiate(plotterPref);
+        plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        plotter.transform.position = tileDataMap[levelData.startTileID].tileLocation;
+        plotter.GetComponent<PathPlotter>().SetInitialAllowedTiles(levelData.startTileID, tileDataMap[levelData.startTileID].neighbouringTiles);
+    }
+
+    public LevelData GetLevelData()
+    {
+        return levelData;
+    }
+
+    #endregion
+
+    #region Level editor accompanying methods
 
     /// <summary>
     /// Creates the tiles for the level, Creates the destructable and non destructable obstacles
@@ -52,9 +77,6 @@ public class LevelEditorObjectGenerator : MonoBehaviour
     {
         tiles.Clear();
         tileDataMap.Clear();
-
-        rowCount = rows;
-        columnCount = columns;
 
         CalculateCellLocations(rows, columns);
 
@@ -128,6 +150,8 @@ public class LevelEditorObjectGenerator : MonoBehaviour
         }
     }
 
+
+
     /// <summary>
     /// Returns a tiledID for a specified row and column
     /// </summary>
@@ -136,7 +160,7 @@ public class LevelEditorObjectGenerator : MonoBehaviour
     /// <returns></returns>
     public int GetTileID(int row, int column)
     {
-        return column + (row) * (columnCount);
+        return column + (row) * (levelData.columnCount);
     }
 
     /// <summary>
@@ -146,7 +170,7 @@ public class LevelEditorObjectGenerator : MonoBehaviour
     /// <returns></returns>
     public int GetRow(int tileID)
     {
-        return tileID / columnCount;
+        return tileID / levelData.columnCount;
     }
 
     /// <summary>
@@ -156,7 +180,7 @@ public class LevelEditorObjectGenerator : MonoBehaviour
     /// <returns></returns>
     public int GetColumn(int tileID)
     {
-        return tileID - GetRow(tileID) * columnCount;
+        return tileID - GetRow(tileID) * levelData.columnCount;
     }
 
     /// <summary>
@@ -187,7 +211,7 @@ public class LevelEditorObjectGenerator : MonoBehaviour
         int row = GetRow(tileID);
         int column = GetColumn(tileID);
 
-        if (column != columnCount - 1)
+        if (column != levelData.columnCount - 1)
             return tileDataMap[GetTileID(row, column + 1)];
         else
             return null;
@@ -219,7 +243,7 @@ public class LevelEditorObjectGenerator : MonoBehaviour
         int row = GetRow(tileID);
         int column = GetColumn(tileID);
 
-        if (row != rowCount - 1)
+        if (row != levelData.rowCount - 1)
             return tileDataMap[GetTileID(row + 1, column)];
         else
             return null;
@@ -265,58 +289,12 @@ public class LevelEditorObjectGenerator : MonoBehaviour
 
     }
 
-    public void CreateWallTile(WallTileType tileType, int tileID)
-    {
-        GameObject oldTile = tiles[tileID];
-
-        GameObject newTile = Instantiate(wallTilePrefs[(int)tileType]);
-        newTile.transform.parent = oldTile.transform.parent;
-        newTile.transform.localPosition = oldTile.transform.localPosition;
-        newTile.transform.localScale = Vector3.one;
-
-        tiles[tileID] = newTile;
-
-        Destroy(oldTile);
-    }
-
-    public void ClearWallTile(int tileID)
-    {
-        GameObject oldTile = tiles[tileID];
-
-        GameObject newTile = Instantiate(baseTilePref);
-        newTile.transform.parent = oldTile.transform.parent;
-        newTile.transform.localPosition = oldTile.transform.localPosition;
-        newTile.transform.localScale = Vector3.one;
-
-        tiles[tileID] = newTile;
-
-        Destroy(oldTile);
-    }
-
     public Vector2 GetTileLocation(int tileID)
     {
         return tileDataMap[tileID].tileLocation;
     }
 
-    private void SetupLevelElements()
-    {
-        player = Instantiate(playerPref);
-        player.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-        player.transform.position = tileDataMap[startTileID].tileLocation;
-
-        plotter = Instantiate(plotterPref);
-        plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-        plotter.transform.position = tileDataMap[startTileID].tileLocation;
-        plotter.GetComponent<PathPlotter>().SetInitialAllowedTiles(startTileID, tileDataMap[startTileID].neighbouringTiles);
-    }
-
-    #endregion
-
     #region Enemy related
-
-    [SerializeField] private GameObject securityCamPref;
-    [SerializeField] private GameObject patrolPref;
-    [SerializeField] private GameObject laserPref;
 
     public GameObject CreateSecurityCam()
     {
@@ -334,4 +312,18 @@ public class LevelEditorObjectGenerator : MonoBehaviour
     }
 
     #endregion
+
+    #endregion
+
+}
+
+[System.Serializable]
+public class LevelData
+{
+    public int startTileID;
+    public int endTileID;
+    public int secondaryObjectiveTileID;
+    public int rowCount;
+    public int columnCount;
+    public GameRuleType gameRuleType;
 }

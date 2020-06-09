@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject startPlottingButton;
     [SerializeField] private GameObject plotConfirmButton;
     [SerializeField] private GameObject plotResetButton;
+    [SerializeField] private GameObject rePlotButton;
     [SerializeField] private GameObject restartButton;
 
     private void OnEnable()
@@ -44,6 +45,11 @@ public class UIManager : MonoBehaviour
         GameEventManager.Instance.TriggerSyncEvent(new RestartLevelEvent());
     }
 
+    public void RePlot()
+    {
+        GameEventManager.Instance.TriggerSyncEvent(new RetryLevelEvent());
+    }
+
     #region Event Listeners
 
     private void OnGameStateChangedEvent(GameStateChangedEvent e)
@@ -55,6 +61,7 @@ public class UIManager : MonoBehaviour
             case GameStateType.ExamineLevel:
                 startPlottingButton.SetActive(true);
                 restartButton.SetActive(false);
+                rePlotButton.SetActive(false);
                 break;
             case GameStateType.Plotting:
                 startPlottingButton.SetActive(false);
@@ -64,6 +71,7 @@ public class UIManager : MonoBehaviour
             case GameStateType.SimulateLevel:
                 plotConfirmButton.SetActive(false);
                 plotResetButton.SetActive(false);
+                rePlotButton.SetActive(true);
                 break;
             case GameStateType.TransitionToNextLevel:
                 break;

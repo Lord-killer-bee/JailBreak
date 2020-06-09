@@ -26,14 +26,5 @@ public class PatrollingEnemyGizmo : Editor
         {
             waypoints[i] = Handles.PositionHandle(waypoints[i], Quaternion.identity);
         }
-
-        //Vector2 size = targetObject.GetComponent<BoxCollider2D>().size;
-        //Vector2 offset = targetObject.GetComponent<BoxCollider2D>().offset;
-
-        //size.y = 7.5f + ((targetObject.GetDetectionTileRange() - 1) * 5);
-        //offset.y = size.y / 2;
-
-        //targetObject.GetComponent<BoxCollider2D>().size = size;
-        //targetObject.GetComponent<BoxCollider2D>().offset = offset;
     }
 }

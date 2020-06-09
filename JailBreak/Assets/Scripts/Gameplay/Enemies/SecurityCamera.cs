@@ -14,15 +14,15 @@ public class SecurityCamera : MonoBehaviour
     [SerializeField] private GameObject camImage;
 
     CameraMoveLocation currentLocation;
-    DateTime waitStartedTime;
     bool objectInitialized = false;
-    bool playerDetected = false;
     bool waitStarted = false;
     float waitUnits = 0;
 
+    #region Base methods
+
     private void Start()
     {
-        if(TestLevelManager.testEnvironment)
+        if(TestController.testEnvironment)
             Initialize();
     }
 
@@ -41,9 +41,7 @@ public class SecurityCamera : MonoBehaviour
     public void Initialize()
     {
         objectInitialized = true;
-        playerDetected = false;
 
-        waitStartedTime = DateTime.Now;
         waitStarted = true;
         waitUnits = waitTime;
 
@@ -74,16 +72,28 @@ public class SecurityCamera : MonoBehaviour
             {
                 currentLocation = GetNextMoveDirection(currentLocation, rotationDirection);
                 camImage.transform.localEulerAngles = GetRotationForDirection(currentLocation);
-                waitStartedTime = DateTime.Now;
                 waitStarted = true;
                 waitUnits = waitTime;
             }
         }
     }
 
+    void ResetEnemy()
+    {
+        waitStarted = true;
+        waitUnits = waitTime;
+
+        currentLocation = startLocation;
+        camImage.transform.localEulerAngles = GetRotationForDirection(currentLocation);
+    }
+
+    #endregion
+
+    #region Event listeners
+
     private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
     {
-        if (TestLevelManager.testEnvironment)
+        if (TestController.testEnvironment)
             ResetEnemy();
     }
 
@@ -93,15 +103,9 @@ public class SecurityCamera : MonoBehaviour
             ResetEnemy();
     }
 
-    void ResetEnemy()
-    {
-        waitStartedTime = DateTime.Now;
-        waitStarted = true;
-        waitUnits = waitTime;
+    #endregion
 
-        currentLocation = startLocation;
-        camImage.transform.localEulerAngles = GetRotationForDirection(currentLocation);
-    }
+    #region Helper methods
 
     public CameraMoveLocation GetNextMoveDirection(CameraMoveLocation currentDirection, CameraRotationDirection rotationDirection)
     {
@@ -160,6 +164,8 @@ public class SecurityCamera : MonoBehaviour
         return Vector3.zero;
     }
 
+    #endregion
+
     #region Getters and setters
 
     public Transform GetCamImageTransform()
@@ -208,18 +214,4 @@ public class SecurityCamera : MonoBehaviour
     }
 
     #endregion
-}
-
-[System.Serializable]
-public class SecurityCamDataUnit
-{
-    public float waitTime;
-    public List<CameraMoveLocation> moveLocations;
-    public CameraMoveLocation startLocation;
-    public CameraRotationDirection rotationDirection;
-
-
-    public Vector2 position;
-    public Quaternion rotation;
-    public Vector3 scale;
 }

@@ -15,12 +15,13 @@ public class EnemyLaserEnd : MonoBehaviour
     private Vector3 targetPosition;
     private int moveDirection = 1;
     private bool startWaiting = false;
-    private DateTime delayStartTime;
     float waitUnits = 0;
+
+    #region Base methods
 
     private void Start()
     {
-        if (TestLevelManager.testEnvironment)
+        if (TestController.testEnvironment)
             Initialize();
     }
 
@@ -48,14 +49,13 @@ public class EnemyLaserEnd : MonoBehaviour
         {
             if (currentPathIndex != targetPathIndex && !startWaiting)
             {
-                //transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
                 transform.position = targetPosition;
             }
 
-            if (Vector3.Distance(transform.position, targetPosition) == 0 && !startWaiting)
+            if (Vector2.Distance(transform.position, targetPosition) <= 0.1f && !startWaiting)
             {
                 startWaiting = true;
-                //delayStartTime = DateTime.Now;
+                waitUnits = waitTime;
 
                 if (moveDirection == 1)
                 {
@@ -84,7 +84,6 @@ public class EnemyLaserEnd : MonoBehaviour
 
             if (startWaiting)
             {
-                //if ((DateTime.Now - delayStartTime).TotalMilliseconds >= waitTime * 1000)
                 if (GameTimer.GameTicked)
                 {
                     if (startWaiting)
@@ -122,7 +121,7 @@ public class EnemyLaserEnd : MonoBehaviour
                     if (targetPathIndex < waypoints.Length && targetPathIndex >= 0)
                         targetPosition = waypoints[targetPathIndex];
 
-                    transform.up = (targetPosition - transform.position).normalized;
+                    //transform.up = (targetPosition - transform.position).normalized;
                 }
             }
         }
@@ -144,6 +143,10 @@ public class EnemyLaserEnd : MonoBehaviour
         transform.up = (waypoints[currentPathIndex + 1] - transform.position).normalized;
     }
 
+    #endregion
+
+    #region Getters and setters
+
     public Vector3[] GetWayPoints()
     {
         return waypoints;
@@ -153,4 +156,6 @@ public class EnemyLaserEnd : MonoBehaviour
     {
         this.waypoints = waypoints;
     }
+
+    #endregion
 }

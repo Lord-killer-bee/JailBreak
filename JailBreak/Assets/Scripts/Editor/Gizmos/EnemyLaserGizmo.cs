@@ -22,11 +22,11 @@ public class EnemyLaserGizmo : Editor
 
         for (int i = 0; i < laserEnds.Length; i++)
         {
-            laserEnds[i] = recievedEnds[i] - targetObject.transform.position;
+            laserEnds[i] = targetObject.transform.position - recievedEnds[i];
         }
 
         EdgeCollider2D collider = targetObject.GetComponent<EdgeCollider2D>();
-        collider.points = laserEnds;
+        collider.points = targetObject.GetLaserEndLocalPositons();
 
         LineRenderer line = targetObject.GetComponent<LineRenderer>();
         line.positionCount = 2;

@@ -77,3 +77,8 @@ public class RestartLevelEvent : GameEvent
 {
 
 }
+
+public class RetryLevelEvent : GameEvent
+{
+
+}

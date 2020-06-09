@@ -12,20 +12,20 @@ public class PatrollingEnemy : MonoBehaviour
     [SerializeField] private float waitTime;
 
     private bool objectInitialized = true;
-    private bool playerDetected = false;
     private int currentPathIndex = 0;
     private int targetPathIndex = 0;
     
     private Vector2 targetPosition;
     private int moveDirection = 1;
     private bool startWaiting = false;
-    private DateTime delayStartTime;
     private bool reachedEnd = false;
     private float waitUnits = 0;
 
+    #region Base methods
+
     private void Start()
     {
-        //if (TestLevelManager.testEnvironment)
+        if (TestController.testEnvironment)
             Initialize();
     }
 
@@ -65,14 +65,13 @@ public class PatrollingEnemy : MonoBehaviour
         {
             if (currentPathIndex != targetPathIndex && !startWaiting)
             {
-                //transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
                 transform.position = targetPosition;
             }
 
-            if (Vector3.Distance(transform.position, targetPosition) == 0 && !startWaiting)
+            if (Vector2.Distance(transform.position, targetPosition) == 0 && !startWaiting)
             {
                 startWaiting = true;
-                delayStartTime = DateTime.Now;
+                waitUnits = waitTime;
 
                 if (moveDirection == 1)
                 {
@@ -103,7 +102,6 @@ public class PatrollingEnemy : MonoBehaviour
 
             if (startWaiting)
             {
-                //if ((DateTime.Now - delayStartTime).TotalMilliseconds >= waitTime * 1000)
                 if (GameTimer.GameTicked)
                 {
                     if (startWaiting)
@@ -120,10 +118,10 @@ public class PatrollingEnemy : MonoBehaviour
                     if (reachedEnd)
                     {
                         startWaiting = true;
-                        delayStartTime = DateTime.Now;
                         reachedEnd = false;
+                        waitUnits = waitTime;
 
-                        if(moveDirection == 1)
+                        if (moveDirection == 1)
                         {
                             transform.up = ((Vector2)waypoints[currentPathIndex + 1] - (Vector2)transform.position).normalized;
                         }
@@ -172,20 +170,7 @@ public class PatrollingEnemy : MonoBehaviour
         if(collider.tag == GameConsts.PLAYER_TAG)
         {
             GameEventManager.Instance.TriggerSyncEvent(new PlayerDetectedEvent());
-            playerDetected = true;
         }
-    }
-
-    private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
-    {
-        if (TestLevelManager.testEnvironment)
-            ResetEnemy();
-    }
-
-    private void OnGameStateChanged(GameStateChangedEvent e)
-    {
-        if (e.stateType == GameStateType.SimulateLevel)
-            ResetEnemy();
     }
 
     private void ResetEnemy()
@@ -203,6 +188,24 @@ public class PatrollingEnemy : MonoBehaviour
 
         transform.up = (waypoints[currentPathIndex + 1] - transform.position).normalized;
     }
+
+    #endregion
+
+    #region Event listeners
+
+    private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
+    {
+        if (TestController.testEnvironment)
+            ResetEnemy();
+    }
+
+    private void OnGameStateChanged(GameStateChangedEvent e)
+    {
+        if (e.stateType == GameStateType.SimulateLevel)
+            ResetEnemy();
+    }
+
+    #endregion
 
     #region Getters and Setters
 
@@ -237,16 +240,4 @@ public class PatrollingEnemy : MonoBehaviour
     }
 
     #endregion
-}
-
-[System.Serializable]
-public class PatrollingEnemyDataUnit
-{
-    public Vector3[] waypoints;
-    public float moveSpeed;
-    public float detectionTileRange;
-
-    public Vector2 position;
-    public Quaternion rotation;
-    public Vector3 scale;
 }

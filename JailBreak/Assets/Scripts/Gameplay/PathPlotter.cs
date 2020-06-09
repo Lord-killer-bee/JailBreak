@@ -17,10 +17,11 @@ public class PathPlotter : MonoBehaviour
 
     private List<int> plottedIds = new List<int>();
     private List<int> currentAllowedTiles = new List<int>();
+    private List<GameObject> markers = new List<GameObject>();
 
     private void Start()
     {
-        if (TestLevelManager.testEnvironment)
+        if (TestController.testEnvironment)
             Initialize();
     }
 
@@ -37,15 +38,31 @@ public class PathPlotter : MonoBehaviour
 
     public void ResetPlotter()
     {
-        line.positionCount = 0;
+        Destroy(line);
+
         plottedPoints.Clear();
         plottedIds.Clear();
+
+        for (int i = 0; i < markers.Count; i++)
+        {
+            Destroy(markers[i]);
+        }
+
+        markers.Clear();
     }
 
     public void DestroyPlotterLine()
     {
         Destroy(line);
+
+        for (int i = 0; i < markers.Count; i++)
+        {
+            Destroy(markers[i]);
+        }
+
+        markers.Clear();
     }
+
 
     void Update()
     {
@@ -128,7 +145,8 @@ public class PathPlotter : MonoBehaviour
             line.SetPosition(line.positionCount - 1, position);
         }
 
-        Instantiate(markerPref, position, Quaternion.identity);
+        GameObject marker = Instantiate(markerPref, position, Quaternion.identity);
+        markers.Add(marker);
 
         plottedPoints.Add(position);
         line.positionCount++;

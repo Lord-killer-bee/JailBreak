@@ -20,8 +20,6 @@ public class PlayerController : MonoBehaviour
 
     Vector2 targetPosition;
 
-    DateTime delayStartTime;
-
     private void Start()
     {
         GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
@@ -42,23 +40,20 @@ public class PlayerController : MonoBehaviour
         {
             if (currentPathIndex < targetPathIndex && !startWaiting)
             {
-                //transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
                 transform.position = targetPosition;
             }
 
             if (Vector3.Distance(transform.position, targetPosition) == 0 && !startWaiting)
             {
-                delayStartTime = DateTime.Now;
                 currentPathIndex++;
                 startWaiting = true;
 
-                if(!TestLevelManager.testEnvironment)
+                if(!TestController.testEnvironment)
                     GameEventManager.Instance.TriggerAsyncEvent(new PlayerMovedToTileEvent(plottedTileIDs[currentPathIndex]));
             }
 
             if (startWaiting)
             {
-                //if ((DateTime.Now - delayStartTime).TotalMilliseconds >= moveWaitTime * 1000)
                 if (GameTimer.GameTicked)
                 {
                     if (startWaiting)
@@ -107,7 +102,7 @@ public class PlayerController : MonoBehaviour
         plottedPoints = e.plottedPoints;
         plottedTileIDs = e.plottedTileIDs;
 
-        if (TestLevelManager.testEnvironment)
+        if (TestController.testEnvironment)
         {
             StartTraversal();
         }

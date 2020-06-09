@@ -7,16 +7,15 @@ using UnityEngine;
 public class EnemyLaser : MonoBehaviour
 {
     [SerializeField] private Transform[] laserEnds;
-    //[SerializeField] private LaserEndMotionData[] motionData = new LaserEndMotionData[2];
 
     private Vector3[] laserEndPositions = new Vector3[2];
-    private bool playerDetected = false;
     private bool objectInitialized = true;
 
+    #region Base methods
 
     void Start()
     {
-        if (TestLevelManager.testEnvironment)
+        if (TestController.testEnvironment)
             Initialize();
     }
 
@@ -50,13 +49,22 @@ public class EnemyLaser : MonoBehaviour
         if (collider.tag == GameConsts.PLAYER_TAG)
         {
             GameEventManager.Instance.TriggerSyncEvent(new PlayerDetectedEvent());
-            playerDetected = true;
         }
     }
 
+    //private void OnDestroy()
+    //{
+    //    laserEnds[0] = null;
+    //    laserEnds[1] = null;
+    //}
+
+    #endregion
+
+    #region Event listeners
+
     private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
     {
-        if (TestLevelManager.testEnvironment)
+        if (TestController.testEnvironment)
         {
             laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
             laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
@@ -72,6 +80,8 @@ public class EnemyLaser : MonoBehaviour
         }
     }
 
+    #endregion
+
     #region Getters and Setters
 
     public Vector3[] GetLaserEndPositions()
@@ -82,6 +92,18 @@ public class EnemyLaser : MonoBehaviour
         }
 
         return laserEndPositions;
+    }
+
+    public Vector2[] GetLaserEndLocalPositons()
+    {
+        Vector2[] result = new Vector2[2];
+
+        for (int i = 0; i < laserEndPositions.Length; i++)
+        {
+            result[i] = laserEnds[i].localPosition;
+        }
+
+        return result;
     }
 
     public void SetLaserEndPositions(Vector3[] laserEndPositions)
@@ -95,23 +117,4 @@ public class EnemyLaser : MonoBehaviour
     }
 
     #endregion
-
-}
-
-[System.Serializable]
-public class EnemyLaserDataUnit
-{
-    public Vector3[] laserEnds;
-
-    public Vector2 position;
-    public Quaternion rotation;
-    public Vector3 scale;
-}
-
-[System.Serializable]
-public class LaserEndMotionData
-{
-    public LaserMoveDirection moveDirection;
-    public float moveSpeed;
-    public float moveDistance;
 }

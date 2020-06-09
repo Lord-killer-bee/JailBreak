@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     {
         GameEventManager.Instance.AddListener<GameStateCompletedEvent>(OnGameStateCompleted);
         GameEventManager.Instance.AddListener<RestartLevelEvent>(OnLevelRestart);
+        GameEventManager.Instance.AddListener<RetryLevelEvent>(OnLevelRetry);
         GameEventManager.Instance.AddListener<PlayerCompletedLevelEvent>(OnLevelComplete);
     }
 
@@ -19,12 +20,13 @@ public class GameManager : MonoBehaviour
     {
         GameEventManager.Instance.RemoveListener<GameStateCompletedEvent>(OnGameStateCompleted);
         GameEventManager.Instance.RemoveListener<RestartLevelEvent>(OnLevelRestart);
+        GameEventManager.Instance.RemoveListener<RetryLevelEvent>(OnLevelRetry);
         GameEventManager.Instance.RemoveListener<PlayerCompletedLevelEvent>(OnLevelComplete);
     }
 
     private void Start()
     {
-        SetState(GameStateType.LevelSetup);
+        SetState(GameStateType.LoadScene);
     }
 
     #region States related
@@ -37,6 +39,8 @@ public class GameManager : MonoBehaviour
 
             switch (currentGameState)
             {
+                case GameStateType.LoadScene:
+                    break;
                 case GameStateType.LevelSetup:
                     break;
                 case GameStateType.ExamineLevel:
@@ -53,23 +57,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UpdateCurrentState()
-    {
-        switch (currentGameState)
-        {
-            case GameStateType.LevelSetup:
-                break;
-            case GameStateType.ExamineLevel:
-                break;
-            case GameStateType.Plotting:
-                break;
-            case GameStateType.SimulateLevel:
-                break;
-            case GameStateType.TransitionToNextLevel:
-                break;
-        }
-    }
-
     #endregion
 
     #region Event listeners
@@ -78,6 +65,9 @@ public class GameManager : MonoBehaviour
     {
         switch (e.stateType)
         {
+            case GameStateType.LoadScene:
+                SetState(GameStateType.LevelSetup);
+                break;
             case GameStateType.LevelSetup:
                 SetState(GameStateType.ExamineLevel);
                 break;
@@ -90,7 +80,7 @@ public class GameManager : MonoBehaviour
             case GameStateType.SimulateLevel:
                 break;
             case GameStateType.TransitionToNextLevel:
-                SetState(GameStateType.ExamineLevel);
+                SetState(GameStateType.LoadScene);
                 break;
         }
     }
@@ -103,6 +93,11 @@ public class GameManager : MonoBehaviour
     private void OnLevelComplete(PlayerCompletedLevelEvent e)
     {
         SetState(GameStateType.TransitionToNextLevel);
+    }
+
+    private void OnLevelRetry(RetryLevelEvent e)
+    {
+        SetState(GameStateType.LevelSetup);
     }
 
     #endregion

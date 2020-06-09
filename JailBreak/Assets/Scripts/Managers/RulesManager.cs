@@ -7,9 +7,9 @@ using System;
 public class RulesManager : MonoBehaviour
 {
     int currentLevelID;
-    LevelData currentLevelData;
 
     bool secondaryObjectiveAchieved = false;
+    private LevelData currentLevelData;
 
     private void OnEnable()
     {
@@ -26,12 +26,12 @@ public class RulesManager : MonoBehaviour
     private void OnCurrentLevelIDrecieved(SetCurrentLevelID e)
     {
         currentLevelID = e.levelID;
-        currentLevelData = Resources.Load<LevelData>(GameConsts.LEVEL_DATA_PATH + currentLevelID);
+        currentLevelData = FindObjectOfType<LevelEditorObjectGenerator>().GetLevelData();
     }
 
     private void OnPlayerMovedToTile(PlayerMovedToTileEvent e)
     {
-        switch (currentLevelData.ruleType)
+        switch (currentLevelData.gameRuleType)
         {
             case GameRuleType.DirectExit:
                 if(e.tileID == currentLevelData.endTileID)
@@ -40,7 +40,7 @@ public class RulesManager : MonoBehaviour
                 }
                 break;
             case GameRuleType.PickKeyThenExit:
-                if (e.tileID == currentLevelData.keyTileID)
+                if (e.tileID == currentLevelData.secondaryObjectiveTileID)
                 {
                     secondaryObjectiveAchieved = true;
                 }
@@ -50,7 +50,7 @@ public class RulesManager : MonoBehaviour
                 }
                 break;
             case GameRuleType.HackStationThenExit:
-                if (e.tileID == currentLevelData.stationTileID)
+                if (e.tileID == currentLevelData.secondaryObjectiveTileID)
                 {
                     secondaryObjectiveAchieved = true;
                 }

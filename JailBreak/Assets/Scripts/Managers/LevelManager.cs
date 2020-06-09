@@ -3,26 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Core;
+using UnityEngine.SceneManagement;
+using System.Linq;
 
+/// <summary>
+/// Load the scene as per the Level ID
+/// Creates player and plotter based on states and level data specified in the loaded level
+/// </summary>
 public class LevelManager : MonoBehaviour
 {
     #region Scene refs
 
-    [SerializeField] private GameObject baseTilePref;
     [SerializeField] private GameObject playerPref;
     [SerializeField] private GameObject plotterPref;
-    [SerializeField] private GameObject securityCamPref;
-    [SerializeField] private GameObject enemyPatrolPref;
-    [SerializeField] private GameObject laserPref;
 
-    private LevelData currentLevelDataObj;
     private int currentLevelID;
+    private LevelData currentLevelData;
+
+    private string[] gameScenes = new string[] { "Level_Camera", "Level_Camera" };
 
     #endregion
 
     #region Private variables
     private Dictionary<int, TileData> tileDataMap = new Dictionary<int, TileData>();
-    private List<GameObject> tiles = new List<GameObject>();
     private GameObject player, plotter;
 
     #endregion
@@ -32,12 +35,12 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         currentLevelID = 0;
-        currentLevelDataObj = 
-            Resources.Load<LevelData>(GameConsts.LEVEL_DATA_PATH + currentLevelID);
     }
 
     private void OnEnable()
     {
+        SceneManager.sceneLoaded += OnSceneLevelLoaded;
+
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.AddListener<ResetPlotterEvent>(OnResetPlotter);
         GameEventManager.Instance.AddListener<RestartLevelEvent>(OnRestartLevel);
@@ -45,6 +48,8 @@ public class LevelManager : MonoBehaviour
 
     private void OnDisable()
     {
+        SceneManager.sceneLoaded -= OnSceneLevelLoaded;
+
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.RemoveListener<ResetPlotterEvent>(OnResetPlotter);
         GameEventManager.Instance.RemoveListener<RestartLevelEvent>(OnRestartLevel);
@@ -58,8 +63,13 @@ public class LevelManager : MonoBehaviour
     {
         switch (e.stateType)
         {
+            case GameStateType.LoadScene:
+                AddSceneLevel();
+                break;
             case GameStateType.LevelSetup:
-                CreateGrid();
+
+                ClearLevel();
+                RetreiveCurrentLevelData();
                 SetupLevelElements();
 
                 GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.LevelSetup));
@@ -76,108 +86,54 @@ public class LevelManager : MonoBehaviour
                 plotter.SetActive(false);
                 break;
             case GameStateType.TransitionToNextLevel:
-                LoadNextLevel();
+                StartCoroutine(LoadNextLevel());
                 break;
+        }
+    }
+
+    private void AddSceneLevel()
+    {
+        SceneManager.LoadSceneAsync(gameScenes[currentLevelID], LoadSceneMode.Additive);
+    }
+
+    private void OnSceneLevelLoaded(Scene scene, LoadSceneMode sceneMode)
+    {
+        if (gameScenes.Contains(scene.name))
+        {
+            GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.LoadScene));
         }
     }
 
     private void OnResetPlotter(ResetPlotterEvent e)
     {
-        plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+        plotter.transform.position = tileDataMap[currentLevelData.startTileID].tileLocation;
         plotter.GetComponent<PathPlotter>().ResetPlotter();
+        plotter.GetComponent<PathPlotter>().SetInitialAllowedTiles(currentLevelData.startTileID, tileDataMap[currentLevelData.startTileID].neighbouringTiles);
     }
 
     private void OnRestartLevel(RestartLevelEvent e)
     {
-        player.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
-        plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+        player.transform.position = tileDataMap[currentLevelData.startTileID].tileLocation;
+        plotter.transform.position = tileDataMap[currentLevelData.startTileID].tileLocation;
         plotter.GetComponent<PathPlotter>().ResetPlotter();
+        plotter.GetComponent<PathPlotter>().SetInitialAllowedTiles(currentLevelData.startTileID, tileDataMap[currentLevelData.startTileID].neighbouringTiles);
         plotter.SetActive(false);
     }
 
-    #endregion
-
-    #region Grid Creation
-
-    /// <summary>
-    /// Creates the tiles for the level, Creates the destructable and non destructable obstacles
-    /// Creates non destructable obstacles at every odd row and column 
-    /// Destructible obstacles are created at random but are avoided to spawn near player
-    /// </summary>
-    void CreateGrid()
+    private void RetreiveCurrentLevelData()
     {
-        CalculateCellLocations();
+        currentLevelData = FindObjectOfType<LevelEditorObjectGenerator>().GetLevelData();
 
-        GameObject tile = null;
-        GameObject tilePref = null;
+        tileDataMap.Clear();
 
-        tiles.Clear();
+        Tile[] tiles = FindObjectsOfType<Tile>();
 
-        foreach (KeyValuePair<int, TileData> data in tileDataMap)
+        for (int i = 0; i < tiles.Length; i++)
         {
-            tilePref = baseTilePref;
-
-            tile = Instantiate(tilePref, transform);
-            tile.transform.localPosition = data.Value.tileLocation;
-            tile.transform.localScale = Vector3.one;
-            tile.transform.localRotation = Quaternion.identity;
-
-            tiles.Add(tile);
-
-            data.Value.tileType = TileType.BaseTile;
-
-            TileData neighbouringTile = GetLeftTileData(data.Key);
-
-            if(neighbouringTile != null)
-            {
-                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
-            }
-
-            neighbouringTile = GetRightTileData(data.Key);
-
-            if (neighbouringTile != null)
-            {
-                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
-            }
-
-            neighbouringTile = GetTopTileData(data.Key);
-
-            if (neighbouringTile != null)
-            {
-                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
-            }
-
-            neighbouringTile = GetBottomTileData(data.Key);
-
-            if (neighbouringTile != null)
-            {
-                data.Value.neighbouringTiles.Add(neighbouringTile.tileID);
-            }
-
-            tile.GetComponent<Tile>().tileData = data.Value;
+            tileDataMap.Add(tiles[i].tileData.tileID, tiles[i].tileData);
         }
-    }
 
-    /// <summary>
-    /// Calculates the cell locations and tileIDs for the grid
-    /// </summary>
-    void CalculateCellLocations()
-    {
-        float x = 0, y = 0;
-        int tileID;
-
-        for (int row = 0; row < currentLevelDataObj.rowCount; row++)
-        {
-            for (int column = 0; column < currentLevelDataObj.columnCount; column++)
-            {
-                x = column - ((float)currentLevelDataObj.columnCount - 1) / 2;
-                y = ((float)currentLevelDataObj.rowCount - 1) / 2 - row;
-
-                tileID = GetTileID(row, column);
-
-                tileDataMap.Add(tileID, new TileData() { tileID = tileID, tileLocation = new Vector2(x, y) });
-            }
-        }
+        TestController.testEnvironment = false;
     }
 
     #endregion
@@ -192,7 +148,7 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     public int GetTileID(int row, int column)
     {
-        return column + (row) * (currentLevelDataObj.columnCount);
+        return column + (row) * (currentLevelData.columnCount);
     }
 
     /// <summary>
@@ -202,7 +158,7 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     public int GetRow(int tileID)
     {
-        return tileID / currentLevelDataObj.columnCount;
+        return tileID / currentLevelData.columnCount;
     }
 
     /// <summary>
@@ -212,7 +168,7 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     public int GetColumn(int tileID)
     {
-        return tileID - GetRow(tileID) * currentLevelDataObj.columnCount;
+        return tileID - GetRow(tileID) * currentLevelData.columnCount;
     }
 
     /// <summary>
@@ -243,7 +199,7 @@ public class LevelManager : MonoBehaviour
         int row = GetRow(tileID);
         int column = GetColumn(tileID);
 
-        if (column != currentLevelDataObj.columnCount - 1)
+        if (column != currentLevelData.columnCount - 1)
             return tileDataMap[GetTileID(row, column + 1)];
         else
             return null;
@@ -275,7 +231,7 @@ public class LevelManager : MonoBehaviour
         int row = GetRow(tileID);
         int column = GetColumn(tileID);
 
-        if (row != currentLevelDataObj.rowCount - 1)
+        if (row != currentLevelData.rowCount - 1)
             return tileDataMap[GetTileID(row + 1, column)];
         else
             return null;
@@ -289,120 +245,57 @@ public class LevelManager : MonoBehaviour
     {
         player = Instantiate(playerPref);
         player.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-        player.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
+        player.transform.position = tileDataMap[currentLevelData.startTileID].tileLocation;
 
         plotter = Instantiate(plotterPref);
         plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-        plotter.transform.position = tileDataMap[currentLevelDataObj.startTileID].tileLocation;
-        plotter.GetComponent<PathPlotter>().SetInitialAllowedTiles(currentLevelDataObj.startTileID, tileDataMap[currentLevelDataObj.startTileID].neighbouringTiles);
+        plotter.transform.position = tileDataMap[currentLevelData.startTileID].tileLocation;
+        plotter.GetComponent<PathPlotter>().SetInitialAllowedTiles(currentLevelData.startTileID, tileDataMap[currentLevelData.startTileID].neighbouringTiles);
 
         plotter.SetActive(false);
 
-        for (int i = 0; i < currentLevelDataObj.securityCamsdata.Count; i++)
-        {
-            GameObject cam = Instantiate(securityCamPref);
-            SecurityCamera camComp = cam.GetComponent<SecurityCamera>();
-
-            camComp.SetWaitTime(currentLevelDataObj.securityCamsdata[i].waitTime);
-            camComp.SetMoveLocations(currentLevelDataObj.securityCamsdata[i].moveLocations);
-            camComp.SetStartLocation(currentLevelDataObj.securityCamsdata[i].startLocation);
-            camComp.SetRotationDirection(currentLevelDataObj.securityCamsdata[i].rotationDirection);
-
-            cam.transform.position = currentLevelDataObj.securityCamsdata[i].position;
-            cam.transform.rotation = currentLevelDataObj.securityCamsdata[i].rotation;
-            cam.transform.localScale = currentLevelDataObj.securityCamsdata[i].scale;
-
-            cam.GetComponent<SecurityCamera>().Initialize();
-        }
-
-        for (int i = 0; i < currentLevelDataObj.patrollersdata.Count; i++)
-        {
-            GameObject patrol = Instantiate(enemyPatrolPref);
-            PatrollingEnemy patrolComp = patrol.GetComponent<PatrollingEnemy>();
-
-            patrolComp.SetDetectionTileRange(currentLevelDataObj.patrollersdata[i].detectionTileRange);
-            patrolComp.SetMoveSpeed(currentLevelDataObj.patrollersdata[i].moveSpeed);
-            patrolComp.SetWayPoints(currentLevelDataObj.patrollersdata[i].waypoints);
-
-            patrol.transform.position = currentLevelDataObj.patrollersdata[i].position;
-            patrol.transform.rotation = currentLevelDataObj.patrollersdata[i].rotation;
-            patrol.transform.localScale = currentLevelDataObj.patrollersdata[i].scale;
-
-            patrol.GetComponent<PatrollingEnemy>().Initialize();
-        }
-
-        for (int i = 0; i < currentLevelDataObj.lasersdata.Count; i++)
-        {
-            GameObject laser = Instantiate(laserPref);
-            EnemyLaser laserComp = laser.GetComponent<EnemyLaser>();
-
-            laserComp.SetLaserEndPositions(currentLevelDataObj.lasersdata[i].laserEnds);
-
-            laser.transform.position = currentLevelDataObj.lasersdata[i].position;
-            laser.transform.rotation = currentLevelDataObj.lasersdata[i].rotation;
-            laser.transform.localScale = currentLevelDataObj.lasersdata[i].scale;
-
-            laser.GetComponent<EnemyLaser>().Initialize();
-        }
-    }
-
-    public void ClearLevel()
-    {
-        for (int i = 0; i < tiles.Count; i++)
-        {
-            Destroy(tiles[i]);
-        }
-
-        tiles.Clear();
-        tileDataMap.Clear();
-
-        Destroy(player);
-
-        plotter.GetComponent<PathPlotter>().DestroyPlotterLine();
-        Destroy(plotter);
-
+        //Initialize all the enemies
         SecurityCamera[] cams = FindObjectsOfType<SecurityCamera>();
 
         for (int i = 0; i < cams.Length; i++)
         {
-            Destroy(cams[i].gameObject);
+            cams[i].Initialize();
         }
 
-        //Laser data
-        EnemyLaser[] lasers = FindObjectsOfType<EnemyLaser>();
-
-        for (int i = 0; i < lasers.Length; i++)
-        {
-            Destroy(lasers[i].gameObject);
-        }
-
-        //Patrol data
         PatrollingEnemy[] patrollers = FindObjectsOfType<PatrollingEnemy>();
 
         for (int i = 0; i < patrollers.Length; i++)
         {
-            Destroy(patrollers[i].gameObject);
+            patrollers[i].Initialize();
         }
 
+        EnemyLaser[] lasers = FindObjectsOfType<EnemyLaser>();
+
+        for (int i = 0; i < lasers.Length; i++)
+        {
+            lasers[i].Initialize();
+        }
     }
 
-    private void LoadNextLevel()
+    private IEnumerator LoadNextLevel()
     {
+        SceneManager.UnloadSceneAsync(gameScenes[currentLevelID], UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+
         currentLevelID++;
-        currentLevelDataObj = Resources.Load<LevelData>(GameConsts.LEVEL_DATA_PATH + currentLevelID);
 
-        if (currentLevelDataObj == null)
-        {
-            Debug.LogError("Level file not found!!");
-            return;
-        }
-        else
-        {
-            ClearLevel();
-            CreateGrid();
-            SetupLevelElements();
+        yield return new WaitForSeconds(1.0f);
 
-            GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.TransitionToNextLevel));
+        GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.TransitionToNextLevel));
+    }
+
+    private void ClearLevel()
+    {
+        Destroy(player);
+
+        if (plotter != null)
+        {
+            plotter.GetComponent<PathPlotter>().DestroyPlotterLine();
+            Destroy(plotter);
         }
     }
 
