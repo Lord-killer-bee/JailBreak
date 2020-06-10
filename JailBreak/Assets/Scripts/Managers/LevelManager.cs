@@ -20,7 +20,7 @@ public class LevelManager : MonoBehaviour
     private int currentLevelID;
     private LevelData currentLevelData;
 
-    private string[] gameScenes = new string[] { "Level_Camera", "Level_Camera" };
+    private string[] gameScenes = new string[] { "Level_Camera", "Level_B" };
 
     #endregion
 
@@ -134,6 +134,15 @@ public class LevelManager : MonoBehaviour
         }
 
         TestController.testEnvironment = false;
+
+        foreach (Camera cam in FindObjectsOfType<Camera>())
+        {
+            if(cam.tag != "MainCamera")
+            {
+                cam.gameObject.SetActive(false);
+            }
+        }
+        
     }
 
     #endregion
@@ -283,7 +292,7 @@ public class LevelManager : MonoBehaviour
 
         currentLevelID++;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.TransitionToNextLevel));
     }

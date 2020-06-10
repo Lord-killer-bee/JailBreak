@@ -27,11 +27,15 @@ namespace Core
         private Queue<GameEvent> eventQueue = new Queue<GameEvent>();
         bool isQueueProcessing = false;
 
-        private Dictionary<Type, EventDelegate> listenerMap = new Dictionary<Type, EventDelegate>(); 
+        private Dictionary<Type, EventDelegate> listenerMap = new Dictionary<Type, EventDelegate>();
+        private Dictionary<System.Delegate, EventDelegate> delegateLookup = new Dictionary<System.Delegate, EventDelegate>();
 
         public void AddListener<T>(EventDelegate<T> func) where T : GameEvent
         {
             EventDelegate convertedDel = (e) => func((T)e);
+
+            if (!delegateLookup.ContainsKey(func))
+                delegateLookup[func] = convertedDel;
 
             if (!listenerMap.ContainsKey(typeof(T)))
             {       
@@ -47,20 +51,34 @@ namespace Core
 
         public void RemoveListener<T>(EventDelegate<T> func) where T : GameEvent
         {
-            EventDelegate convertedDel = (e) => func((T)e);
+            EventDelegate convertedDel = null;
 
-            if (!listenerMap.ContainsKey(typeof(T)))
+            if (delegateLookup.TryGetValue(func, out convertedDel))
             {
-                return;
-            }
-            else
-            {
-                listenerMap[typeof(T)] -= convertedDel;
+                EventDelegate tempDel;
 
-                if(listenerMap[typeof(T)] == null)
+                if (listenerMap.TryGetValue(typeof(T), out tempDel))
                 {
-                    listenerMap.Remove(typeof(T));
+                    if (!listenerMap.ContainsKey(typeof(T)))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        tempDel -= convertedDel;
+
+                        if (tempDel == null)
+                        {
+                            listenerMap.Remove(typeof(T));
+                        }
+                        else
+                        {
+                            listenerMap[typeof(T)] = tempDel;
+                        }
+                    }
                 }
+
+                delegateLookup.Remove(func);
             }
         }
 

@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject plotResetButton;
     [SerializeField] private GameObject rePlotButton;
     [SerializeField] private GameObject restartButton;
+    [SerializeField] private GameObject transitionPanel;
 
     private void OnEnable()
     {
@@ -56,9 +57,13 @@ public class UIManager : MonoBehaviour
     {
         switch (e.stateType)
         {
+            case GameStateType.LoadScene:
+                break;
             case GameStateType.LevelSetup:
                 break;
             case GameStateType.ExamineLevel:
+                transitionPanel.SetActive(false);
+
                 startPlottingButton.SetActive(true);
                 restartButton.SetActive(false);
                 rePlotButton.SetActive(false);
@@ -74,6 +79,8 @@ public class UIManager : MonoBehaviour
                 rePlotButton.SetActive(true);
                 break;
             case GameStateType.TransitionToNextLevel:
+                transitionPanel.SetActive(true);
+
                 break;
             default:
                 break;
