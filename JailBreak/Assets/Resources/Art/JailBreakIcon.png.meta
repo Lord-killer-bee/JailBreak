@@ -1,7 +1,37 @@
 fileFormatVersion: 2
 guid: bbb9850581b86e7458e4d25787d3c42f
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: JailBreakIcon_0
+    21300002: JailBreakIcon_1
+    21300004: JailBreakIcon_2
+    21300006: JailBreakIcon_3
+    21300008: JailBreakIcon_4
+    21300010: JailBreakIcon_5
+    21300012: JailBreakIcon_6
+    21300014: JailBreakIcon_7
+    21300016: JailBreakIcon_8
+    21300018: JailBreakIcon_9
+    21300020: JailBreakIcon_10
+    21300022: JailBreakIcon_11
+    21300024: JailBreakIcon_12
+    21300026: JailBreakIcon_13
+    21300028: JailBreakIcon_14
+    21300030: JailBreakIcon_15
+    21300032: JailBreakIcon_16
+    21300034: JailBreakIcon_17
+    21300036: JailBreakIcon_18
+    21300038: JailBreakIcon_19
+    21300040: JailBreakIcon_20
+    21300042: JailBreakIcon_21
+    21300044: JailBreakIcon_22
+    21300046: JailBreakIcon_23
+    21300048: JailBreakIcon_24
+    21300050: JailBreakIcon_25
+    21300052: JailBreakIcon_26
+    21300054: JailBreakIcon_27
+    21300056: JailBreakIcon_28
+    21300058: JailBreakIcon_29
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -40,7 +70,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -69,9 +99,191 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: JailBreakIcon_0
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 661
+        width: 286
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fbd9b50900f71145b0eb64c09c6ecac
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailBreakIcon_1
+      rect:
+        serializedVersion: 2
+        x: 571
+        y: 662
+        width: 289
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97626e394be5cd1499e03d7b5c741893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailBreakIcon_2
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 473
+        width: 328
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 837a0c27e8248cb4f86b3e386c0aaf68
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailBreakIcon_3
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 479
+        width: 334
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33eb0db4af7393a4fb4a4d30b6979de7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailBreakIcon_4
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 308
+        width: 337
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aee0f96e491c18e44a54ef256a437a6b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailBreakIcon_5
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 317
+        width: 336
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 470bb73d343e655408bf50257a6093bb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailBreakIcon_6
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 153
+        width: 77
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23a8ed6645d02174a84d504d9903bbe6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailBreakIcon_7
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 150
+        width: 85
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96c63fef044d376488619d4cff2081fb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
