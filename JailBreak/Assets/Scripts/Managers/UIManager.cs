@@ -25,12 +25,14 @@ public class UIManager : MonoBehaviour
     int currentLevelIndex = 0;
 
     bool firstLevel = true;
+    int duckIndex = 0;
 
     private void OnEnable()
     {
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChangedEvent);
         GameEventManager.Instance.AddListener<PlayerDetectedEvent>(OnPlayerDetectedEvent);
         GameEventManager.Instance.AddListener<SetCurrentLevelID>(OnSetCurrentLevelID);
+        GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
     }
 
     private void OnDisable()
@@ -38,17 +40,90 @@ public class UIManager : MonoBehaviour
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChangedEvent);
         GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetectedEvent);
         GameEventManager.Instance.RemoveListener<SetCurrentLevelID>(OnSetCurrentLevelID);
+        GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
     }
 
     public void StartPlotting()
     {
         GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.ExamineLevel));
         PlayButtonSound();
+
+        if(currentLevelIndex == 0)
+        {
+            playerDialogueObjects[0].dialogueUnits[0].SetActive(false);
+            playerDialogueObjects[0].dialogueUnits[1].SetActive(true);
+
+            Invoke("EnableDuckBubble", 1.0f);
+        }
+    }
+
+    void EnableDuckBubble()
+    {
+        if (currentLevelIndex == 0)
+        {
+            duckDialogueObjects[0].dialogueUnits[duckIndex].SetActive(true);
+            duckIndex++;
+        }
+        else if(currentLevelIndex == 1)
+        {
+            duckDialogueObjects[1].dialogueUnits[0].SetActive(true);
+
+            Invoke("DisableLevelTwoBubbles", 3.0f);
+        }
+        else if (currentLevelIndex == 2)
+        {
+            duckDialogueObjects[2].dialogueUnits[0].SetActive(true);
+
+            Invoke("DisableLevelBubbles", 3.0f);
+        }
+        else if (currentLevelIndex == 3)
+        {
+            duckDialogueObjects[3].dialogueUnits[0].SetActive(true);
+
+            Invoke("DisableLevelBubbles", 3.0f);
+        }
+    }
+
+    void DisableLevelBubbles()
+    {
+        if (currentLevelIndex == 1)
+        {
+            duckDialogueObjects[1].dialogueUnits[0].SetActive(false);
+            playerDialogueObjects[1].dialogueUnits[0].SetActive(false);
+        }
+        else if(currentLevelIndex == 2)
+        {
+            duckDialogueObjects[2].dialogueUnits[0].SetActive(false);
+            playerDialogueObjects[2].dialogueUnits[0].SetActive(false);
+        }
+        else if (currentLevelIndex == 3)
+        {
+            duckDialogueObjects[3].dialogueUnits[0].SetActive(false);
+            playerDialogueObjects[3].dialogueUnits[0].SetActive(false);
+        }
+    }
+
+    private void OnPathDrawingComplete(PathDrawingCompleteEvent e)
+    {
+        if (currentLevelIndex == 0)
+        {
+            playerDialogueObjects[0].dialogueUnits[1].SetActive(false);
+            duckDialogueObjects[0].dialogueUnits[0].SetActive(false);
+
+            playerDialogueObjects[0].dialogueUnits[2].SetActive(true);
+
+            Invoke("EnableDuckBubble", 2.0f);
+        }
     }
 
     public void ConfirmPath()
     {
         GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.Plotting));
+
+        if(currentLevelIndex == 0)
+        {
+            playerDialogueObjects[0].dialogueUnits[2].SetActive(false);
+        }
     }
 
     public void ResetPath()
@@ -96,6 +171,8 @@ public class UIManager : MonoBehaviour
 
     private void OnGameStateChangedEvent(GameStateChangedEvent e)
     {
+        UpdateTutorial(e.stateType);
+
         switch (e.stateType)
         {
             case GameStateType.LoadScene:
@@ -109,6 +186,7 @@ public class UIManager : MonoBehaviour
                 startPlottingButton.SetActive(true);
                 restartButton.SetActive(false);
                 rePlotButton.SetActive(false);
+
                 break;
             case GameStateType.Plotting:
                 startPlottingButton.SetActive(false);
@@ -130,9 +208,52 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void UpdateTutorial(GameStateType stateType)
+    {
+        switch (stateType)
+        {
+            case GameStateType.LevelSetup:
+                break;
+            case GameStateType.ExamineLevel:
+                
+                break;
+            case GameStateType.Plotting:
+                break;
+            case GameStateType.SimulateLevel:
+                break;
+            case GameStateType.TransitionToNextLevel:
+                break;
+        }
+    }
+
     private void OnSetCurrentLevelID(SetCurrentLevelID e)
     {
         currentLevelIndex = e.levelID;
+
+        if (e.levelID == 0)
+        {
+            playerDialogueObjects[0].dialogueUnits[0].SetActive(true);
+        }
+        else if(e.levelID == 1)
+        {
+            duckDialogueObjects[0].dialogueUnits[1].SetActive(false);
+
+            playerDialogueObjects[1].dialogueUnits[0].SetActive(true);
+
+            Invoke("EnableDuckBubble", 4.0f);
+        }
+        else if (e.levelID == 2)
+        {
+            playerDialogueObjects[2].dialogueUnits[0].SetActive(true);
+
+            Invoke("EnableDuckBubble", 4.0f);
+        }
+        else if (e.levelID == 3)
+        {
+            playerDialogueObjects[3].dialogueUnits[0].SetActive(true);
+
+            Invoke("EnableDuckBubble", 4.0f);
+        }
     }
 
     private void OnPlayerDetectedEvent(PlayerDetectedEvent e)
@@ -144,9 +265,9 @@ public class UIManager : MonoBehaviour
 
     private void SetLevelTransition()
     {
-        transitionTextImage.GetComponent<Image>().sprite = messageSprites[currentLevelIndex].sprites[0];
-        transitionTextImage.SetSprites(messageSprites[currentLevelIndex].sprites);
-        transitionPanel.SetActive(true);
+        //transitionTextImage.GetComponent<Image>().sprite = messageSprites[currentLevelIndex].sprites[0];
+        //transitionTextImage.SetSprites(messageSprites[currentLevelIndex].sprites);
+        //transitionPanel.SetActive(true);
     }
 
     private void PlaySimulationCountdown()
