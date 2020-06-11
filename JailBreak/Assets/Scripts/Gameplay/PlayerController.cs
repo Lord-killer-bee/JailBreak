@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.AddListener<SimulateCountDownEnded>(OnSimulateCountdownEnded);
         GameEventManager.Instance.AddListener<PlayerDetectedEvent>(OnPlayerDetected);
     }
 
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulateCountdownEnded);
         GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetected);
     }
 
@@ -111,7 +113,14 @@ public class PlayerController : MonoBehaviour
     private void OnGameStateChanged(GameStateChangedEvent e)
     {
         if (e.stateType == GameStateType.SimulateLevel)
-            StartTraversal();
+        {
+            //TODO: OPTIONAL DO A SMOOTH REWIND
+        }
+    }
+
+    private void OnSimulateCountdownEnded(SimulateCountDownEnded e)
+    {
+        StartTraversal();
     }
 
     private void OnPlayerDetected(PlayerDetectedEvent e)

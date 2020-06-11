@@ -15,6 +15,7 @@ public class EnemyLaserEnd : MonoBehaviour
     private Vector3 targetPosition;
     private int moveDirection = 1;
     private bool startWaiting = false;
+    private bool isPaused = false;
     float waitUnits = 0;
 
     #region Base methods
@@ -45,7 +46,7 @@ public class EnemyLaserEnd : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (objectInitialized)
+        if (objectInitialized && !isPaused)
         {
             if (currentPathIndex != targetPathIndex && !startWaiting)
             {
@@ -141,6 +142,16 @@ public class EnemyLaserEnd : MonoBehaviour
         targetPosition = waypoints[targetPathIndex];
 
         transform.up = (waypoints[currentPathIndex + 1] - transform.position).normalized;
+    }
+
+    public void PauseLaser()
+    {
+        isPaused = true;
+    }
+
+    public void ResumeLaser()
+    {
+        isPaused = false;
     }
 
     #endregion

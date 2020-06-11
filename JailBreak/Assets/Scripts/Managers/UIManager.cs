@@ -74,6 +74,8 @@ public class UIManager : MonoBehaviour
                 plotResetButton.SetActive(true);
                 break;
             case GameStateType.SimulateLevel:
+                PlaySimulationCountdown();
+
                 plotConfirmButton.SetActive(false);
                 plotResetButton.SetActive(false);
                 rePlotButton.SetActive(true);
@@ -93,4 +95,14 @@ public class UIManager : MonoBehaviour
     }
 
     #endregion
+
+    private void PlaySimulationCountdown()
+    {
+        Invoke("FireCountdownComplete", 2.0f);
+    }
+
+    private void FireCountdownComplete()
+    {
+        GameEventManager.Instance.TriggerSyncEvent(new SimulateCountDownEnded());
+    }
 }

@@ -33,12 +33,14 @@ public class PatrollingEnemy : MonoBehaviour
     {
         GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.AddListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
     }
 
     private void OnDisable()
     {
         GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
     }
 
     public void Initialize()
@@ -201,8 +203,13 @@ public class PatrollingEnemy : MonoBehaviour
 
     private void OnGameStateChanged(GameStateChangedEvent e)
     {
-        if (e.stateType == GameStateType.SimulateLevel)
-            ResetEnemy();
+        //if (e.stateType == GameStateType.SimulateLevel)
+        //    ResetEnemy();
+    }
+
+    private void OnSimulationCoundownEnded(SimulateCountDownEnded e)
+    {
+        ResetEnemy();
     }
 
     #endregion

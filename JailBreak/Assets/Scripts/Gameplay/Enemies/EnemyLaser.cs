@@ -29,12 +29,14 @@ public class EnemyLaser : MonoBehaviour
     {
         GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.AddListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
     }
 
     private void OnDisable()
     {
         GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
+        GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
     }
 
     private void Update()
@@ -75,9 +77,15 @@ public class EnemyLaser : MonoBehaviour
     {
         if (e.stateType == GameStateType.SimulateLevel)
         {
-            laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
-            laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
+            //laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
+            //laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
         }
+    }
+
+    private void OnSimulationCoundownEnded(SimulateCountDownEnded e)
+    {
+        laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
+        laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
     }
 
     #endregion

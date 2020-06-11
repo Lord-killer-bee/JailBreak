@@ -82,3 +82,8 @@ public class RetryLevelEvent : GameEvent
 {
 
 }
+
+public class SimulateCountDownEnded : GameEvent
+{
+
+}
