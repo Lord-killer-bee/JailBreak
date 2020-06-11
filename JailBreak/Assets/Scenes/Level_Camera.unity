@@ -1025,7 +1025,7 @@ MonoBehaviour:
     type: 3}
   levelData:
     startTileID: 80
-    endTileID: 92
+    endTileID: 20
     secondaryObjectiveTileID: -1
     rowCount: 10
     columnCount: 10
