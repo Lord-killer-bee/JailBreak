@@ -72,7 +72,7 @@ public class RulesManager : MonoBehaviour
     }
 
     private void OnPlotterPlottedPoint(PlotterPlottedPoint e)
-    {
+    {/*
         left.SetActive(false);
         right.SetActive(false);
         top.SetActive(false);
@@ -103,7 +103,7 @@ public class RulesManager : MonoBehaviour
                 bottom.SetActive(true);
                 bottom.transform.position = e.tileData.tileLocation - new Vector2(0, 1);
             }
-        }
+        }*/
     }
 
     private void OnGameStateChanged(GameStateChangedEvent e)

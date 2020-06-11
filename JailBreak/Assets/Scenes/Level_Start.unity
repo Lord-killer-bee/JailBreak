@@ -6490,7 +6490,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8862779344722781202}
   - component: {fileID: 6293197059962414903}
-  - component: {fileID: 7167808609594745326}
   m_Layer: 0
   m_Name: BaseTile(Clone)
   m_TagString: BaseTile
@@ -12155,23 +12154,6 @@ Transform:
   m_Father: {fileID: 3262881624748592590}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5128575056120283433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8784266664996484195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f2a30ba9df3551489cea4d21f85ad42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileData:
-    tileID: 44
-    tileType: 1
-    tileLocation: {x: -0.5, y: 0.5}
-    neighbouringTiles: 2b0000002d0000002200000036000000
 --- !u!212 &5138762676632578191
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -14475,7 +14457,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1804537458770237652}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -15831,23 +15813,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7167808609594745326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1804537458770237652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f2a30ba9df3551489cea4d21f85ad42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileData:
-    tileID: 60
-    tileType: 1
-    tileLocation: {x: -4.5, y: -1.5}
-    neighbouringTiles: 3d0000003200000046000000
 --- !u!4 &7178281726952458011
 Transform:
   m_ObjectHideFlags: 0
@@ -16655,7 +16620,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8784266664996484195}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -18456,7 +18421,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3524401444713323837}
   - component: {fileID: 7689888303364218145}
-  - component: {fileID: 5128575056120283433}
   m_Layer: 0
   m_Name: BaseTile(Clone)
   m_TagString: BaseTile
