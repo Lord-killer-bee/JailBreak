@@ -45,7 +45,7 @@ public class RulesManager : MonoBehaviour
             case GameRuleType.DirectExit:
                 if(e.tileID == currentLevelData.endTileID)
                 {
-                    GameEventManager.Instance.TriggerSyncEvent(new PlayerCompletedLevelEvent());
+                    GameEventManager.Instance.TriggerSyncEvent(new PlayerCompletedLevelEvent(currentLevelID));
                 }
                 break;
             case GameRuleType.PickKeyThenExit:
@@ -55,7 +55,7 @@ public class RulesManager : MonoBehaviour
                 }
                 else if (e.tileID == currentLevelData.endTileID && secondaryObjectiveAchieved)
                 {
-                    GameEventManager.Instance.TriggerSyncEvent(new PlayerCompletedLevelEvent());
+                    GameEventManager.Instance.TriggerSyncEvent(new PlayerCompletedLevelEvent(currentLevelID));
                 }
                 break;
             case GameRuleType.HackStationThenExit:
@@ -65,7 +65,7 @@ public class RulesManager : MonoBehaviour
                 }
                 else if (e.tileID == currentLevelData.endTileID && secondaryObjectiveAchieved)
                 {
-                    GameEventManager.Instance.TriggerSyncEvent(new PlayerCompletedLevelEvent());
+                    GameEventManager.Instance.TriggerSyncEvent(new PlayerCompletedLevelEvent(currentLevelID));
                 }
                 break;
         }

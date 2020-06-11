@@ -70,7 +70,12 @@ public class SetCurrentLevelID : GameEvent
 
 public class PlayerCompletedLevelEvent : GameEvent
 {
+    public int levelID;
 
+    public PlayerCompletedLevelEvent(int levelID)
+    {
+        this.levelID = levelID;
+    }
 }
 
 public class RestartLevelEvent : GameEvent

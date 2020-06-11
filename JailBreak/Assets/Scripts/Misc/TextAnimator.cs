@@ -32,4 +32,9 @@ public class TextAnimator : MonoBehaviour
                 currentIndex = -1;
         }
     }
+
+    public void SetSprites(Sprite[] sprites)
+    {
+        this.sprites = sprites;
+    }
 }

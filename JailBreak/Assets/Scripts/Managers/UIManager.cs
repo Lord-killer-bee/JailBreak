@@ -13,8 +13,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject rePlotButton;
     [SerializeField] private GameObject restartButton;
     [SerializeField] private GameObject transitionPanel;
+    [SerializeField] private TextAnimator transitionTextImage;
     [SerializeField] private GameObject countdownPanel;
     [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private MessageUnit[] messageSprites;
+
+    int currentLevelIndex = 0;
 
     bool firstLevel = true;
 
@@ -22,12 +26,14 @@ public class UIManager : MonoBehaviour
     {
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChangedEvent);
         GameEventManager.Instance.AddListener<PlayerDetectedEvent>(OnPlayerDetectedEvent);
+        GameEventManager.Instance.AddListener<SetCurrentLevelID>(OnSetCurrentLevelID);
     }
 
     private void OnDisable()
     {
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChangedEvent);
         GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetectedEvent);
+        GameEventManager.Instance.RemoveListener<SetCurrentLevelID>(OnSetCurrentLevelID);
     }
 
     public void StartPlotting()
@@ -113,12 +119,16 @@ public class UIManager : MonoBehaviour
                 rePlotButton.SetActive(true);
                 break;
             case GameStateType.TransitionToNextLevel:
-                transitionPanel.SetActive(true);
-
+                SetLevelTransition();
                 break;
             default:
                 break;
         }
+    }
+
+    private void OnSetCurrentLevelID(SetCurrentLevelID e)
+    {
+        currentLevelIndex = e.levelID;
     }
 
     private void OnPlayerDetectedEvent(PlayerDetectedEvent e)
@@ -127,6 +137,13 @@ public class UIManager : MonoBehaviour
     }
 
     #endregion
+
+    private void SetLevelTransition()
+    {
+        transitionTextImage.GetComponent<Image>().sprite = messageSprites[currentLevelIndex].sprites[0];
+        transitionTextImage.SetSprites(messageSprites[currentLevelIndex].sprites);
+        transitionPanel.SetActive(true);
+    }
 
     private void PlaySimulationCountdown()
     {
@@ -139,4 +156,10 @@ public class UIManager : MonoBehaviour
         countdownPanel.SetActive(false);
         GameEventManager.Instance.TriggerSyncEvent(new SimulateCountDownEnded());
     }
+}
+
+[System.Serializable]
+public struct MessageUnit
+{
+    public Sprite[] sprites;
 }
