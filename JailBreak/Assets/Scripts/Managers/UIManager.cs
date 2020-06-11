@@ -14,6 +14,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject restartButton;
     [SerializeField] private GameObject transitionPanel;
     [SerializeField] private GameObject countdownPanel;
+    [SerializeField] private GameObject mainMenuPanel;
+
+    bool firstLevel = true;
 
     private void OnEnable()
     {
@@ -30,6 +33,7 @@ public class UIManager : MonoBehaviour
     public void StartPlotting()
     {
         GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.ExamineLevel));
+        PlayButtonSound();
     }
 
     public void ConfirmPath()
@@ -40,16 +44,42 @@ public class UIManager : MonoBehaviour
     public void ResetPath()
     {
         GameEventManager.Instance.TriggerSyncEvent(new ResetPlotterEvent());
+        PlayButtonSound();
     }
 
     public void RestartCurrentLevel()
     {
         GameEventManager.Instance.TriggerSyncEvent(new RestartLevelEvent());
+        PlayButtonSound();
     }
 
     public void RePlot()
     {
         GameEventManager.Instance.TriggerSyncEvent(new RetryLevelEvent());
+        PlayButtonSound();
+    }
+
+    public void StartGame()
+    {
+        if (firstLevel)
+        {
+            transitionPanel.SetActive(true);
+            firstLevel = false;
+        }
+        mainMenuPanel.SetActive(false);
+        PlayButtonSound();
+
+        Invoke("TriggerMainMenuComplete", 1.5f);
+    }
+
+    void TriggerMainMenuComplete()
+    {
+        GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.MainMenu));
+    }
+
+    void PlayButtonSound()
+    {
+        GameEventManager.Instance.TriggerAsyncEvent(new ButtonClicked());
     }
 
     #region Event Listeners
@@ -59,6 +89,7 @@ public class UIManager : MonoBehaviour
         switch (e.stateType)
         {
             case GameStateType.LoadScene:
+
                 break;
             case GameStateType.LevelSetup:
                 break;

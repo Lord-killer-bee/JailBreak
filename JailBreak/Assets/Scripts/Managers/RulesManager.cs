@@ -8,6 +8,11 @@ public class RulesManager : MonoBehaviour
 {
     int currentLevelID;
 
+    [SerializeField] private GameObject left;
+    [SerializeField] private GameObject right;
+    [SerializeField] private GameObject top;
+    [SerializeField] private GameObject bottom;
+
     bool secondaryObjectiveAchieved = false;
     private LevelData currentLevelData;
 
@@ -15,12 +20,16 @@ public class RulesManager : MonoBehaviour
     {
         GameEventManager.Instance.AddListener<PlayerMovedToTileEvent>(OnPlayerMovedToTile);
         GameEventManager.Instance.AddListener<SetCurrentLevelID>(OnCurrentLevelIDrecieved);
+        GameEventManager.Instance.AddListener<PlotterPlottedPoint>(OnPlotterPlottedPoint);
+        GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
     }
 
     private void OnDisable()
     {
         GameEventManager.Instance.RemoveListener<PlayerMovedToTileEvent>(OnPlayerMovedToTile);
         GameEventManager.Instance.RemoveListener<SetCurrentLevelID>(OnCurrentLevelIDrecieved);
+        GameEventManager.Instance.RemoveListener<PlotterPlottedPoint>(OnPlotterPlottedPoint);
+        GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
     }
 
     private void OnCurrentLevelIDrecieved(SetCurrentLevelID e)
@@ -61,6 +70,53 @@ public class RulesManager : MonoBehaviour
                 break;
         }
     }
+
+    private void OnPlotterPlottedPoint(PlotterPlottedPoint e)
+    {
+        left.SetActive(false);
+        right.SetActive(false);
+        top.SetActive(false);
+        bottom.SetActive(false);
+
+        for (int i = 0; i < e.tileData.neighbouringTiles.Count; i++)
+        {
+            if (e.tileData.tileID - e.tileData.neighbouringTiles[i] == 1)//Left indicator
+            {
+                left.SetActive(true);
+                left.transform.position = e.tileData.tileLocation - new Vector2(1, 0);
+            }
+
+            if (e.tileData.tileID - e.tileData.neighbouringTiles[i] == -1)//Right indicator
+            {
+                right.SetActive(true);
+                right.transform.position = e.tileData.tileLocation + new Vector2(1, 0);
+            }
+
+            if (e.tileData.tileID - e.tileData.neighbouringTiles[i] == currentLevelData.columnCount)//Top indicator
+            {
+                top.SetActive(true);
+                top.transform.position = e.tileData.tileLocation + new Vector2(0, 1);
+            }
+
+            if (e.tileData.tileID - e.tileData.neighbouringTiles[i] == -currentLevelData.columnCount)//Bottom indicator
+            {
+                bottom.SetActive(true);
+                bottom.transform.position = e.tileData.tileLocation - new Vector2(0, 1);
+            }
+        }
+    }
+
+    private void OnGameStateChanged(GameStateChangedEvent e)
+    {
+        if(e.stateType == GameStateType.SimulateLevel)
+        {
+            left.SetActive(false);
+            right.SetActive(false);
+            top.SetActive(false);
+            bottom.SetActive(false);
+        }
+    }
+
 }
 
 public struct DirectExitGame

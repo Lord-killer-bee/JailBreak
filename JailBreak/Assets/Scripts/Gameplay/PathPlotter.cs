@@ -152,11 +152,15 @@ public class PathPlotter : MonoBehaviour
         line.positionCount++;
 
         currentAllowedTiles = tileData.neighbouringTiles;
+
+        GameEventManager.Instance.TriggerAsyncEvent(new PlotterPlottedPoint(tileData));
     }
 
     public void SetInitialAllowedTiles(int startTileID, List<int> neighbouringTiles)
     {
         currentAllowedTiles = neighbouringTiles;
         currentAllowedTiles.Add(startTileID);
+
+        //GameEventManager.Instance.TriggerAsyncEvent(new PlotterPlottedPoint(tileData));
     }
 }

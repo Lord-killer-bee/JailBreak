@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float moveWaitTime;
 
-    private List<Vector2> plottedPoints;
+    private List<Vector2> plottedPoints = new List<Vector2>();
     public List<int> plottedTileIDs;
     bool startTraversal = false;
     bool startWaiting = false;
@@ -90,14 +90,17 @@ public class PlayerController : MonoBehaviour
 
     private void StartTraversal()
     {
-        startTraversal = true;
-        currentPathIndex = 0;
-        targetPathIndex = 0;
+        if (plottedPoints.Count > 0)
+        {
+            startTraversal = true;
+            currentPathIndex = 0;
+            targetPathIndex = 0;
 
-        startWaiting = true;
-        waitUnits = moveWaitTime;
+            startWaiting = true;
+            waitUnits = moveWaitTime;
 
-        targetPosition = plottedPoints[targetPathIndex];
+            targetPosition = plottedPoints[targetPathIndex];
+        }
     }
 
     private void OnPathDrawingComplete(PathDrawingCompleteEvent e)

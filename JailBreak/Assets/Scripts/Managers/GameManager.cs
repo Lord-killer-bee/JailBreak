@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        SetState(GameStateType.LoadScene);
+        SetState(GameStateType.MainMenu);
     }
 
     #region States related
@@ -65,6 +65,9 @@ public class GameManager : MonoBehaviour
     {
         switch (e.stateType)
         {
+            case GameStateType.MainMenu:
+                SetState(GameStateType.LoadScene);
+                break;
             case GameStateType.LoadScene:
                 SetState(GameStateType.LevelSetup);
                 break;

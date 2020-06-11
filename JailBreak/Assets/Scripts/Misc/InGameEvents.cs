@@ -87,3 +87,18 @@ public class SimulateCountDownEnded : GameEvent
 {
 
 }
+
+public class ButtonClicked : GameEvent
+{
+
+}
+
+public class PlotterPlottedPoint: GameEvent
+{
+    public TileData tileData;
+
+    public PlotterPlottedPoint(TileData tileData)
+    {
+        this.tileData = tileData;
+    }
+}

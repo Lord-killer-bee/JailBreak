@@ -1,6 +1,7 @@
 ﻿public enum GameStateType
 {
     None = 0,
+    MainMenu,
     LoadScene,
     LevelSetup,
     ExamineLevel,
