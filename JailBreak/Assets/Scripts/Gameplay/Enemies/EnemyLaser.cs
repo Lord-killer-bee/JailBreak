@@ -75,7 +75,12 @@ public class EnemyLaser : MonoBehaviour
 
     private void OnGameStateChanged(GameStateChangedEvent e)
     {
-        if (e.stateType == GameStateType.SimulateLevel)
+        if (e.stateType == GameStateType.Plotting)
+        {
+            laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
+            laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
+        }
+        else if (e.stateType == GameStateType.SimulateLevel)
         {
             laserEnds[0].GetComponent<EnemyLaserEnd>().PauseLaser();
             laserEnds[1].GetComponent<EnemyLaserEnd>().PauseLaser();

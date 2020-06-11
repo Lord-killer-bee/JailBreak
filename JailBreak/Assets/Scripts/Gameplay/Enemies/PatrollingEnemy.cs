@@ -204,7 +204,14 @@ public class PatrollingEnemy : MonoBehaviour
 
     private void OnGameStateChanged(GameStateChangedEvent e)
     {
-        isPaused = true;
+        if (e.stateType == GameStateType.Plotting)
+        {
+            ResetEnemy();
+        }
+        else if (e.stateType == GameStateType.SimulateLevel)
+        {
+            isPaused = true;
+        }
     }
 
     private void OnSimulationCoundownEnded(SimulateCountDownEnded e)
