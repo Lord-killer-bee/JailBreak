@@ -82,7 +82,7 @@ public class LevelManager : MonoBehaviour
                 plotter.GetComponent<PathPlotter>().Initialize();
                 break;
             case GameStateType.SimulateLevel:
-                plotter.GetComponent<PathPlotter>().DisablePlotting();
+                plotter.GetComponent<PathPlotter>().DestroyPlotterLine();
                 plotter.SetActive(false);
                 break;
             case GameStateType.TransitionToNextLevel:

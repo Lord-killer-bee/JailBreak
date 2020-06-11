@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
         {
             if (currentPathIndex < targetPathIndex && !startWaiting)
             {
+                transform.up = targetPosition - (Vector2)transform.position;
                 transform.position = targetPosition;
             }
 
