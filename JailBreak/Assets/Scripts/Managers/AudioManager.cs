@@ -11,6 +11,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip quackSound;
     [SerializeField] private AudioClip rewindSound;
 
+    bool bgmFade = false;
+    [SerializeField] float fadeAmount = 10f;
 
     private void OnEnable()
     {
@@ -24,6 +26,20 @@ public class AudioManager : MonoBehaviour
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulationCountdownEnded);
         GameEventManager.Instance.RemoveListener<ButtonClicked>(OnButtonClicked);
+    }
+
+    private void Update()
+    {
+        if (bgmFade)
+        {
+            beatSource.volume -= fadeAmount * Time.deltaTime;
+
+            if(beatSource.volume <= 0)
+            {
+                beatSource.Stop();
+                bgmFade = false;
+            }
+        }
     }
 
     private void OnButtonClicked(ButtonClicked e)
@@ -40,7 +56,8 @@ public class AudioManager : MonoBehaviour
             //Play rewind here
             sfxSource.clip = rewindSound;
             sfxSource.Play();
-            beatSource.Stop();
+
+            FadeOutBgmChannel();
         }
     }
 
@@ -48,7 +65,13 @@ public class AudioManager : MonoBehaviour
     {
         //Reset the beat audio here
         //beatSource.Reset();
+        beatSource.volume = 1;
         beatSource.Play();
+    }
+
+    void FadeOutBgmChannel()
+    {
+        bgmFade = true;
     }
 
 }

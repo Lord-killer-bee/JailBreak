@@ -16,7 +16,34 @@ MonoBehaviour:
   columnCount: 10
   startTileID: 1
   endTileID: 10
-  wallTileIds: 030000000500000006000000080000000b000000
-  securityCamsdata: []
-  lasersdata: []
-  patrollersdata: []
+  keyTileID: 0
+  stationTileID: 0
+  ruleType: 1
+  wallTileIds: 0300000006000000
+  securityCamsdata:
+  - waitTime: 0
+    moveLocations: 
+    startLocation: 0
+    rotationDirection: 0
+    position: {x: 0, y: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  lasersdata:
+  - laserEnds:
+    - {x: -1.63, y: 1.1, z: 0.12890625}
+    - {x: 1.02, y: 0.98, z: 0.12890625}
+    position: {x: 0, y: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  patrollersdata:
+  - waypoints:
+    - {x: -11.907719, y: 1.9606758, z: 0}
+    - {x: -10.392274, y: 5.2017536, z: 0}
+    - {x: -7.504974, y: 6.2237267, z: 0}
+    - {x: -2.6970441, y: 6.519325, z: 0}
+    - {x: -1.510315, y: 0.5162606, z: 0}
+    moveSpeed: 3
+    detectionTileRange: 3
+    position: {x: 0, y: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
