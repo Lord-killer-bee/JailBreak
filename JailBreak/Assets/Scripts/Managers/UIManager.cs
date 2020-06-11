@@ -68,7 +68,7 @@ public class UIManager : MonoBehaviour
         {
             duckDialogueObjects[1].dialogueUnits[0].SetActive(true);
 
-            Invoke("DisableLevelTwoBubbles", 3.0f);
+            Invoke("DisableLevelBubbles", 3.0f);
         }
         else if (currentLevelIndex == 2)
         {
