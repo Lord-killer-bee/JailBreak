@@ -18,6 +18,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private MessageUnit[] messageSprites;
 
+    [SerializeField] private DialogueUnit[] playerDialogueObjects;
+    [SerializeField] private DialogueUnit[] duckDialogueObjects;
+
+
     int currentLevelIndex = 0;
 
     bool firstLevel = true;
@@ -162,4 +166,10 @@ public class UIManager : MonoBehaviour
 public struct MessageUnit
 {
     public Sprite[] sprites;
+}
+
+[System.Serializable]
+public struct DialogueUnit
+{
+    public GameObject[] dialogueUnits;
 }
