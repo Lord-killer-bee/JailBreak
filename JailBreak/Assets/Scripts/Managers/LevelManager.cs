@@ -20,7 +20,7 @@ public class LevelManager : MonoBehaviour
     private int currentLevelID;
     private LevelData currentLevelData;
 
-    private string[] gameScenes = new string[] {"Level_Start", "Level_Guard", "Level_Camera", "Level_B" };
+    private string[] gameScenes = new string[] {"Level_Start", "Level_Start_2", "Level_Guard", "Level_Camera", "Level_B" };
 
     #endregion
 
