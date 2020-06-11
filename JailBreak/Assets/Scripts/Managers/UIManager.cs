@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject rePlotButton;
     [SerializeField] private GameObject restartButton;
     [SerializeField] private GameObject transitionPanel;
+    [SerializeField] private GameObject countdownPanel;
 
     private void OnEnable()
     {
@@ -98,11 +99,13 @@ public class UIManager : MonoBehaviour
 
     private void PlaySimulationCountdown()
     {
+        countdownPanel.SetActive(true);
         Invoke("FireCountdownComplete", 2.0f);
     }
 
     private void FireCountdownComplete()
     {
+        countdownPanel.SetActive(false);
         GameEventManager.Instance.TriggerSyncEvent(new SimulateCountDownEnded());
     }
 }

@@ -16,6 +16,7 @@ public class SecurityCamera : MonoBehaviour
     CameraMoveLocation currentLocation;
     bool objectInitialized = false;
     bool waitStarted = false;
+    bool isPaused = false;
     float waitUnits = 0;
 
     #region Base methods
@@ -101,12 +102,12 @@ public class SecurityCamera : MonoBehaviour
 
     private void OnGameStateChanged(GameStateChangedEvent e)
     {
-        //if(e.stateType == GameStateType.SimulateLevel)
-        //    ResetEnemy();
+        isPaused = true;
     }
 
     private void OnSimulationCoundownEnded(SimulateCountDownEnded e)
     {
+        isPaused = false;
         ResetEnemy();
     }
 

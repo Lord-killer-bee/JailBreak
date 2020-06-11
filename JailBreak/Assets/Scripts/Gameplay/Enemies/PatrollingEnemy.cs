@@ -18,6 +18,7 @@ public class PatrollingEnemy : MonoBehaviour
     private Vector2 targetPosition;
     private int moveDirection = 1;
     private bool startWaiting = false;
+    private bool isPaused = false;
     private bool reachedEnd = false;
     private float waitUnits = 0;
 
@@ -63,7 +64,7 @@ public class PatrollingEnemy : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (objectInitialized)
+        if (objectInitialized && !isPaused)
         {
             if (currentPathIndex != targetPathIndex && !startWaiting)
             {
@@ -203,12 +204,12 @@ public class PatrollingEnemy : MonoBehaviour
 
     private void OnGameStateChanged(GameStateChangedEvent e)
     {
-        //if (e.stateType == GameStateType.SimulateLevel)
-        //    ResetEnemy();
+        isPaused = true;
     }
 
     private void OnSimulationCoundownEnded(SimulateCountDownEnded e)
     {
+        isPaused = false;
         ResetEnemy();
     }
 

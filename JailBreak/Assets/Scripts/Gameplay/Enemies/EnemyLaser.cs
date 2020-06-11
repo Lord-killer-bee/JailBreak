@@ -77,8 +77,8 @@ public class EnemyLaser : MonoBehaviour
     {
         if (e.stateType == GameStateType.SimulateLevel)
         {
-            //laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
-            //laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
+            laserEnds[0].GetComponent<EnemyLaserEnd>().PauseLaser();
+            laserEnds[1].GetComponent<EnemyLaserEnd>().PauseLaser();
         }
     }
 
@@ -86,6 +86,9 @@ public class EnemyLaser : MonoBehaviour
     {
         laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
         laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
+
+        laserEnds[0].GetComponent<EnemyLaserEnd>().ResumeLaser();
+        laserEnds[1].GetComponent<EnemyLaserEnd>().ResumeLaser();
     }
 
     #endregion
