@@ -30,6 +30,7 @@ public class EnemyLaser : MonoBehaviour
         GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.AddListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
+        GameEventManager.Instance.AddListener<ResetPlotterEvent>(OnResetPlotter);
     }
 
     private void OnDisable()
@@ -37,6 +38,7 @@ public class EnemyLaser : MonoBehaviour
         GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
+        GameEventManager.Instance.RemoveListener<ResetPlotterEvent>(OnResetPlotter);
     }
 
     private void LateUpdate()
@@ -101,6 +103,12 @@ public class EnemyLaser : MonoBehaviour
 
         laserEnds[0].GetComponent<EnemyLaserEnd>().ResumeLaser();
         laserEnds[1].GetComponent<EnemyLaserEnd>().ResumeLaser();
+    }
+
+    private void OnResetPlotter(ResetPlotterEvent e)
+    {
+        laserEnds[0].GetComponent<EnemyLaserEnd>().ResetLaser();
+        laserEnds[1].GetComponent<EnemyLaserEnd>().ResetLaser();
     }
 
     #endregion

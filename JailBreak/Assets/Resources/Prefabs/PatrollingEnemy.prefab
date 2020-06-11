@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: 8536263719700830270}
   - component: {fileID: 8536263719700830256}
   - component: {fileID: 7027965023310687506}
+  - component: {fileID: 4008021977264556187}
   m_Layer: 0
   m_Name: PatrollingEnemy
   m_TagString: Untagged
@@ -455,3 +456,24 @@ PolygonCollider2D:
       - {x: -2.4776936, y: 2.564603}
       - {x: -7.506795, y: 2.52926}
       - {x: -7.514038, y: -2.3934484}
+--- !u!50 &4008021977264556187
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8536263719700830257}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0

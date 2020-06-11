@@ -2204,6 +2204,7 @@ GameObject:
   - component: {fileID: 2142092386}
   - component: {fileID: 2142092385}
   - component: {fileID: 2142092384}
+  - component: {fileID: 2142092388}
   m_Layer: 0
   m_Name: PatrollingEnemy (1)
   m_TagString: Untagged
@@ -2337,6 +2338,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &2142092388
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142092383}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!58 &9715764096591963
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -16835,6 +16857,7 @@ GameObject:
   - component: {fileID: 8536263719781438430}
   - component: {fileID: 8536263719781438416}
   - component: {fileID: 7027965023292991218}
+  - component: {fileID: 8536263719781438418}
   m_Layer: 0
   m_Name: PatrollingEnemy
   m_TagString: Untagged
@@ -16842,6 +16865,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!50 &8536263719781438418
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8536263719781438417}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!212 &8536263719781438430
 SpriteRenderer:
   m_ObjectHideFlags: 0

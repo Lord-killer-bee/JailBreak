@@ -32,6 +32,7 @@ public class SecurityCamera : MonoBehaviour
         GameEventManager.Instance.AddListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.AddListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
+        GameEventManager.Instance.AddListener<ResetPlotterEvent>(OnResetPlotter);
     }
 
     private void OnDisable()
@@ -39,6 +40,7 @@ public class SecurityCamera : MonoBehaviour
         GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
+        GameEventManager.Instance.RemoveListener<ResetPlotterEvent>(OnResetPlotter);
     }
 
     public void Initialize()
@@ -115,6 +117,11 @@ public class SecurityCamera : MonoBehaviour
     private void OnSimulationCoundownEnded(SimulateCountDownEnded e)
     {
         isPaused = false;
+        ResetEnemy();
+    }
+
+    private void OnResetPlotter(ResetPlotterEvent e)
+    {
         ResetEnemy();
     }
 
