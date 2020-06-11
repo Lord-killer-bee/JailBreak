@@ -31,6 +31,8 @@ public class EnemyLaser : MonoBehaviour
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.AddListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
         GameEventManager.Instance.AddListener<ResetPlotterEvent>(OnResetPlotter);
+        GameEventManager.Instance.AddListener<PlayerDetectedEvent>(OnPlayerDetected);
+        GameEventManager.Instance.AddListener<RestartLevelEvent>(OnLevelRestart);
     }
 
     private void OnDisable()
@@ -39,6 +41,20 @@ public class EnemyLaser : MonoBehaviour
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
         GameEventManager.Instance.RemoveListener<ResetPlotterEvent>(OnResetPlotter);
+        GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetected);
+        GameEventManager.Instance.RemoveListener<RestartLevelEvent>(OnLevelRestart);
+    }
+
+    private void OnLevelRestart(RestartLevelEvent e)
+    {
+        laserEnds[0].GetComponent<EnemyLaserEnd>().Initialize();
+        laserEnds[1].GetComponent<EnemyLaserEnd>().Initialize();
+    }
+
+    private void OnPlayerDetected(PlayerDetectedEvent e)
+    {
+        laserEnds[0].GetComponent<EnemyLaserEnd>().StopLaser();
+        laserEnds[1].GetComponent<EnemyLaserEnd>().StopLaser();
     }
 
     private void LateUpdate()
@@ -60,6 +76,7 @@ public class EnemyLaser : MonoBehaviour
         {
             Debug.Log(gameObject.name);
             GameEventManager.Instance.TriggerSyncEvent(new PlayerDetectedEvent());
+
         }
     }
 

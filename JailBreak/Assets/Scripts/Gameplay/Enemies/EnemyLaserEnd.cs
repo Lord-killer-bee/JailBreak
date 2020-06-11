@@ -44,6 +44,11 @@ public class EnemyLaserEnd : MonoBehaviour
         transform.up = (waypoints[currentPathIndex + 1] - transform.position).normalized;
     }
 
+    public void StopLaser()
+    {
+        objectInitialized = false;
+    }
+
     public void LateUpdateForced()
     {
         if (objectInitialized && !isPaused)

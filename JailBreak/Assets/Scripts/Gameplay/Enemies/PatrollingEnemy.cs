@@ -36,6 +36,8 @@ public class PatrollingEnemy : MonoBehaviour
         GameEventManager.Instance.AddListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.AddListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
         GameEventManager.Instance.AddListener<ResetPlotterEvent>(OnResetPlotter);
+        GameEventManager.Instance.AddListener<PlayerDetectedEvent>(OnPlayerDetected);
+        GameEventManager.Instance.AddListener<RestartLevelEvent>(OnLevelRestart);
     }
 
     private void OnDisable()
@@ -44,6 +46,18 @@ public class PatrollingEnemy : MonoBehaviour
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
         GameEventManager.Instance.RemoveListener<ResetPlotterEvent>(OnResetPlotter);
+        GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetected);
+        GameEventManager.Instance.RemoveListener<RestartLevelEvent>(OnLevelRestart);
+    }
+
+    private void OnLevelRestart(RestartLevelEvent e)
+    {
+        Initialize();
+    }
+
+    private void OnPlayerDetected(PlayerDetectedEvent e)
+    {
+        objectInitialized = false;
     }
 
     public void Initialize()
