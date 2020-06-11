@@ -43,11 +43,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case GameStateType.LevelSetup:
                     break;
-                case GameStateType.ExamineLevel:
-                    break;
-                case GameStateType.Plotting:
-                    break;
-                case GameStateType.SimulateLevel:
+                case GameStateType.PlayLevel:
                     break;
                 case GameStateType.TransitionToNextLevel:
                     break;
@@ -69,15 +65,10 @@ public class GameManager : MonoBehaviour
                 SetState(GameStateType.LevelSetup);
                 break;
             case GameStateType.LevelSetup:
-                SetState(GameStateType.ExamineLevel);
+                SetState(GameStateType.PlayLevel);
                 break;
-            case GameStateType.ExamineLevel:
-                SetState(GameStateType.Plotting);
-                break;
-            case GameStateType.Plotting:
-                SetState(GameStateType.SimulateLevel);
-                break;
-            case GameStateType.SimulateLevel:
+            case GameStateType.PlayLevel:
+                SetState(GameStateType.TransitionToNextLevel);
                 break;
             case GameStateType.TransitionToNextLevel:
                 SetState(GameStateType.LoadScene);
@@ -87,7 +78,7 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelRestart(RestartLevelEvent e)
     {
-        SetState(GameStateType.ExamineLevel);
+        SetState(GameStateType.PlayLevel);
     }
 
     private void OnLevelComplete(PlayerCompletedLevelEvent e)

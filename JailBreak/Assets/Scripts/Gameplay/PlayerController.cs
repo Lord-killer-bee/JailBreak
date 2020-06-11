@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float moveWaitTime;
 
+    bool plotterPicked = false;
+    private List<int> currentAllowedTiles = new List<int>();
+
     private List<Vector2> plottedPoints;
     public List<int> plottedTileIDs;
     bool startTraversal = false;
@@ -32,6 +35,53 @@ public class PlayerController : MonoBehaviour
         GameEventManager.Instance.RemoveListener<PathDrawingCompleteEvent>(OnPathDrawingComplete);
         GameEventManager.Instance.RemoveListener<GameStateChangedEvent>(OnGameStateChanged);
         GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetected);
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit2D[] hitsinfo = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, 100f);
+
+            for (int i = 0; i < hitsinfo.Length; i++)
+            {
+                if (hitsinfo[i].collider.gameObject == gameObject)
+                {
+                    plotterPicked = true;
+                }
+            }
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            plotterPicked = false;
+        }
+
+        if (plotterPicked)
+        {
+            RaycastHit2D[] hitsinfo = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector3.forward, 100f);
+
+            for (int i = 0; i < hitsinfo.Length; i++)
+            {
+                if (hitsinfo[i].collider.tag == GameConsts.BASETILE_TAG)
+                {
+                    TileData tileData = hitsinfo[i].collider.GetComponent<Tile>().tileData;
+
+                    if (currentAllowedTiles.Contains(tileData.tileID))
+                    {
+                        
+                    }
+                }
+            }
+
+            Vector3 pos;
+            pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            pos.z = 0;
+
+            transform.position = pos;
+
+            //if (plottedIds.Count != 0)
+            //    line.SetPosition(line.positionCount - 1, pos);
+        }
     }
 
     private void LateUpdate()
@@ -110,8 +160,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnGameStateChanged(GameStateChangedEvent e)
     {
-        if (e.stateType == GameStateType.SimulateLevel)
-            StartTraversal();
+        //if (e.stateType == GameStateType.SimulateLevel)
+        //    StartTraversal();
     }
 
     private void OnPlayerDetected(PlayerDetectedEvent e)

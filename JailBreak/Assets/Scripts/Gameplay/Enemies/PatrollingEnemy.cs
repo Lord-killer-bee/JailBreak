@@ -201,8 +201,8 @@ public class PatrollingEnemy : MonoBehaviour
 
     private void OnGameStateChanged(GameStateChangedEvent e)
     {
-        if (e.stateType == GameStateType.SimulateLevel)
-            ResetEnemy();
+        //if (e.stateType == GameStateType.SimulateLevel)
+        //    ResetEnemy();
     }
 
     #endregion

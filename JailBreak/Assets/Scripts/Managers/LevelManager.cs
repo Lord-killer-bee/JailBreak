@@ -74,17 +74,17 @@ public class LevelManager : MonoBehaviour
 
                 GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.LevelSetup));
                 break;
-            case GameStateType.ExamineLevel:
+            case GameStateType.PlayLevel:
                 GameEventManager.Instance.TriggerSyncEvent(new SetCurrentLevelID(currentLevelID));
                 break;
-            case GameStateType.Plotting:
-                plotter.SetActive(true);
-                plotter.GetComponent<PathPlotter>().Initialize();
-                break;
-            case GameStateType.SimulateLevel:
-                plotter.GetComponent<PathPlotter>().DisablePlotting();
-                plotter.SetActive(false);
-                break;
+            //case GameStateType.Plotting:
+            //    plotter.SetActive(true);
+            //    plotter.GetComponent<PathPlotter>().Initialize();
+            //    break;
+            //case GameStateType.SimulateLevel:
+            //    plotter.GetComponent<PathPlotter>().DisablePlotting();
+            //    plotter.SetActive(false);
+            //    break;
             case GameStateType.TransitionToNextLevel:
                 StartCoroutine(LoadNextLevel());
                 break;
@@ -255,6 +255,7 @@ public class LevelManager : MonoBehaviour
         player = Instantiate(playerPref);
         player.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
         player.transform.position = tileDataMap[currentLevelData.startTileID].tileLocation;
+        player.GetComponent<TestPlayerController>().Initialize(tileDataMap[currentLevelData.startTileID], currentLevelData.rowCount, currentLevelData.columnCount);
 
         plotter = Instantiate(plotterPref);
         plotter.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);

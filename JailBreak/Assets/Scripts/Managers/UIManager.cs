@@ -26,20 +26,20 @@ public class UIManager : MonoBehaviour
         GameEventManager.Instance.RemoveListener<PlayerDetectedEvent>(OnPlayerDetectedEvent);
     }
 
-    public void StartPlotting()
-    {
-        GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.ExamineLevel));
-    }
+    //public void StartPlotting()
+    //{
+    //    GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.PlayLevel));
+    //}
 
-    public void ConfirmPath()
-    {
-        GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.Plotting));
-    }
+    //public void ConfirmPath()
+    //{
+    //    GameEventManager.Instance.TriggerSyncEvent(new GameStateCompletedEvent(GameStateType.Plotting));
+    //}
 
-    public void ResetPath()
-    {
-        GameEventManager.Instance.TriggerSyncEvent(new ResetPlotterEvent());
-    }
+    //public void ResetPath()
+    //{
+    //    GameEventManager.Instance.TriggerSyncEvent(new ResetPlotterEvent());
+    //}
 
     public void RestartCurrentLevel()
     {
@@ -61,23 +61,23 @@ public class UIManager : MonoBehaviour
                 break;
             case GameStateType.LevelSetup:
                 break;
-            case GameStateType.ExamineLevel:
+            case GameStateType.PlayLevel:
                 transitionPanel.SetActive(false);
 
                 startPlottingButton.SetActive(true);
                 restartButton.SetActive(false);
                 rePlotButton.SetActive(false);
                 break;
-            case GameStateType.Plotting:
-                startPlottingButton.SetActive(false);
-                plotConfirmButton.SetActive(true);
-                plotResetButton.SetActive(true);
-                break;
-            case GameStateType.SimulateLevel:
-                plotConfirmButton.SetActive(false);
-                plotResetButton.SetActive(false);
-                rePlotButton.SetActive(true);
-                break;
+            //case GameStateType.Plotting:
+            //    startPlottingButton.SetActive(false);
+            //    plotConfirmButton.SetActive(true);
+            //    plotResetButton.SetActive(true);
+            //    break;
+            //case GameStateType.SimulateLevel:
+            //    plotConfirmButton.SetActive(false);
+            //    plotResetButton.SetActive(false);
+            //    rePlotButton.SetActive(true);
+            //    break;
             case GameStateType.TransitionToNextLevel:
                 transitionPanel.SetActive(true);
 

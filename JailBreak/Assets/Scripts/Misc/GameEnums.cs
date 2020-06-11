@@ -3,9 +3,7 @@
     None = 0,
     LoadScene,
     LevelSetup,
-    ExamineLevel,
-    Plotting,
-    SimulateLevel,
+    PlayLevel,
     TransitionToNextLevel,
 }
 
