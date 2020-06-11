@@ -27,12 +27,16 @@ public class AudioManager : MonoBehaviour
         {
             //Simulate starts
             //Play rewind here
+            sfxSource.Play();
+            beatSource.Stop();
         }
     }
 
     private void OnSimulationCountdownEnded(SimulateCountDownEnded e)
     {
         //Reset the beat audio here
+        //beatSource.Reset();
+        beatSource.Play();
     }
 
 }

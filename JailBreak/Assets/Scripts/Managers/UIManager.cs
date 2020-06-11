@@ -100,7 +100,7 @@ public class UIManager : MonoBehaviour
     private void PlaySimulationCountdown()
     {
         countdownPanel.SetActive(true);
-        Invoke("FireCountdownComplete", 2.0f);
+        Invoke("FireCountdownComplete", 3.0f);
     }
 
     private void FireCountdownComplete()
