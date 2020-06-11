@@ -25,7 +25,7 @@ public class GameTimer : MonoBehaviour
                 GameTicked = false;
                 startTime = DateTime.Now;
             }
-            else if((DateTime.Now - startTime).TotalMilliseconds >= 1000f)
+            else if((DateTime.Now - startTime).TotalMilliseconds >= 900f)
             {
                 GameTicked = true;
                 return;

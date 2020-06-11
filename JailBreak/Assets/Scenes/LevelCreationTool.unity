@@ -210,7 +210,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &967726021
 Transform:
   m_ObjectHideFlags: 0
@@ -234,23 +234,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 967726020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c006c3fbc661f141b86f4f173169590, type: 3}
+  m_Script: {fileID: 11500000, guid: 95041d763b4bcda4881983cc67bb7c7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseTilePref: {fileID: 7915944215239287120, guid: 0fe65894d77d97f4c9563264e0a1212f,
-    type: 3}
-  playerPref: {fileID: 9041076973842784733, guid: f600b987d0c94d44baf49a4f39855b31,
-    type: 3}
-  plotterPref: {fileID: 6106118680723158114, guid: 02769a6aaf24da4489b7614ea8bd0c99,
-    type: 3}
-  securityCamPref: {fileID: 6044884542999835482, guid: 90a4e4d1aa20d8d4489276c4c2b4f380,
-    type: 3}
-  enemyPatrolPref: {fileID: 8536263719700830257, guid: 8d90f5873797b204aae52924f3963302,
-    type: 3}
-  laserPref: {fileID: 3278161375871288815, guid: 5fa5b0280c6774a41ab08c078e552ec2,
-    type: 3}
-  currentLevelDataObj: {fileID: 11400000, guid: 83d98c709fdf27f4694c6ce425a4aeff,
-    type: 2}
 --- !u!1 &1150266820
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,14 +272,19 @@ MonoBehaviour:
     type: 3}
   plotterPref: {fileID: 6106118680723158114, guid: 02769a6aaf24da4489b7614ea8bd0c99,
     type: 3}
-  wallTilePrefs: []
-  startTileID: 0
   securityCamPref: {fileID: 6044884542999835482, guid: 90a4e4d1aa20d8d4489276c4c2b4f380,
     type: 3}
   patrolPref: {fileID: 8536263719700830257, guid: 8d90f5873797b204aae52924f3963302,
     type: 3}
   laserPref: {fileID: 3278161375871288815, guid: 5fa5b0280c6774a41ab08c078e552ec2,
     type: 3}
+  levelData:
+    startTileID: 0
+    endTileID: 0
+    secondaryObjectiveTileID: 0
+    rowCount: 0
+    columnCount: 0
+    gameRuleType: 0
 --- !u!4 &1150266822
 Transform:
   m_ObjectHideFlags: 0
