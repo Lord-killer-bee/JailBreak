@@ -39,17 +39,24 @@ public class EnemyLaser : MonoBehaviour
         GameEventManager.Instance.RemoveListener<SimulateCountDownEnded>(OnSimulationCoundownEnded);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
+        laserEnds[0].GetComponent<EnemyLaserEnd>().LateUpdateForced();
+        laserEnds[1].GetComponent<EnemyLaserEnd>().LateUpdateForced();
+
         LineRenderer line = GetComponent<LineRenderer>();
         line.positionCount = 2;
         line.SetPositions(GetLaserEndPositions());
+
+        EdgeCollider2D collider = GetComponent<EdgeCollider2D>();
+        collider.points = GetLaserEndLocalPositons();
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.tag == GameConsts.PLAYER_TAG)
         {
+            Debug.Log(gameObject.name);
             GameEventManager.Instance.TriggerSyncEvent(new PlayerDetectedEvent());
         }
     }
