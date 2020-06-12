@@ -265,9 +265,9 @@ public class UIManager : MonoBehaviour
 
     private void SetLevelTransition()
     {
-        //transitionTextImage.GetComponent<Image>().sprite = messageSprites[currentLevelIndex].sprites[0];
-        //transitionTextImage.SetSprites(messageSprites[currentLevelIndex].sprites);
-        //transitionPanel.SetActive(true);
+        transitionTextImage.GetComponent<Image>().sprite = messageSprites[currentLevelIndex].sprites[0];
+        transitionTextImage.SetSprites(messageSprites[currentLevelIndex].sprites);
+        transitionPanel.SetActive(true);
     }
 
     private void PlaySimulationCountdown()

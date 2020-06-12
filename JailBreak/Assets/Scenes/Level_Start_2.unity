@@ -1566,7 +1566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &686573743
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2130,8 +2130,8 @@ MonoBehaviour:
   laserPref: {fileID: 3278161375871288815, guid: 5fa5b0280c6774a41ab08c078e552ec2,
     type: 3}
   levelData:
-    startTileID: 50
-    endTileID: 58
+    startTileID: 40
+    endTileID: 48
     secondaryObjectiveTileID: -1
     rowCount: 10
     columnCount: 10
@@ -2482,7 +2482,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1261284324
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -19010,9 +19010,7 @@ MonoBehaviour:
   - {x: 3.5, y: 4.5, z: 0}
   - {x: 4.5, y: 4.5, z: 0}
   - {x: 4.5, y: 3.5, z: 0}
-  - {x: 4.5, y: 2.5, z: 0}
-  - {x: 3.5, y: 2.5, z: 0}
-  - {x: 2.5, y: 2.5, z: 0}
+  - {x: 3.5, y: 3.5, z: 0}
   - {x: 2.5, y: 3.5, z: 0}
   moveSpeed: 3
   detectionTileRange: 3
