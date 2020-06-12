@@ -1326,6 +1326,7 @@ MonoBehaviour:
   restartButton: {fileID: 1535545783}
   transitionPanel: {fileID: 1355499784}
   transitionTextImage: {fileID: 1865093310}
+  finalPanel: {fileID: 6521001136203058905}
   countdownPanel: {fileID: 1696985544}
   mainMenuPanel: {fileID: 1602557354}
   messageSprites:
@@ -5783,6 +5784,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9926fed14f17aa4abc6d3ce54190786, type: 3}
+--- !u!1 &6521001136203058905 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2718270844894402570, guid: f9926fed14f17aa4abc6d3ce54190786,
+    type: 3}
+  m_PrefabInstance: {fileID: 6521001136203058904}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &9207049880130164433 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2718270844894402569, guid: f9926fed14f17aa4abc6d3ce54190786,
