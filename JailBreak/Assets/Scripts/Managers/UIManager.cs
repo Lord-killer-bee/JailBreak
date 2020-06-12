@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject restartButton;
     [SerializeField] private GameObject transitionPanel;
     [SerializeField] private TextAnimator transitionTextImage;
+    [SerializeField] private GameObject finalPanel;
+
     [SerializeField] private GameObject countdownPanel;
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private MessageUnit[] messageSprites;
@@ -265,10 +267,20 @@ public class UIManager : MonoBehaviour
 
     private void SetLevelTransition()
     {
-        transitionTextImage.GetComponent<Image>().sprite = messageSprites[currentLevelIndex].sprites[0];
-        transitionTextImage.SetSprites(messageSprites[currentLevelIndex].sprites);
-        transitionPanel.SetActive(true);
-        PlayButtonSound();
+        if (currentLevelIndex == 4)
+        {
+            finalPanel.SetActive(true);
+            PlayButtonSound();
+
+            Invoke("PlayButtonSound", 2.0f);
+        }
+        else
+        {
+            transitionTextImage.GetComponent<Image>().sprite = messageSprites[currentLevelIndex].sprites[0];
+            transitionTextImage.SetSprites(messageSprites[currentLevelIndex].sprites);
+            transitionPanel.SetActive(true);
+            PlayButtonSound();
+        }
     }
 
     private void PlaySimulationCountdown()
