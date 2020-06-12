@@ -268,6 +268,7 @@ public class UIManager : MonoBehaviour
         transitionTextImage.GetComponent<Image>().sprite = messageSprites[currentLevelIndex].sprites[0];
         transitionTextImage.SetSprites(messageSprites[currentLevelIndex].sprites);
         transitionPanel.SetActive(true);
+        PlayButtonSound();
     }
 
     private void PlaySimulationCountdown()
