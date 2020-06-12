@@ -1340,8 +1340,8 @@ MonoBehaviour:
     - {fileID: 21300012, guid: e526f4ada518d754b84f52d1dd29eaed, type: 3}
     - {fileID: 21300014, guid: e526f4ada518d754b84f52d1dd29eaed, type: 3}
   - sprites:
-    - {fileID: 21300020, guid: e526f4ada518d754b84f52d1dd29eaed, type: 3}
-    - {fileID: 21300022, guid: e526f4ada518d754b84f52d1dd29eaed, type: 3}
+    - {fileID: 21300028, guid: e526f4ada518d754b84f52d1dd29eaed, type: 3}
+    - {fileID: 21300030, guid: e526f4ada518d754b84f52d1dd29eaed, type: 3}
   playerDialogueObjects:
   - dialogueUnits:
     - {fileID: 2074218538}
