@@ -93,7 +93,8 @@ public class LevelManager : MonoBehaviour
 
     private void AddSceneLevel()
     {
-        SceneManager.LoadSceneAsync(gameScenes[currentLevelID], LoadSceneMode.Additive);
+        if(currentLevelID < 5)
+            SceneManager.LoadSceneAsync(gameScenes[currentLevelID], LoadSceneMode.Additive);
     }
 
     private void OnSceneLevelLoaded(Scene scene, LoadSceneMode sceneMode)
