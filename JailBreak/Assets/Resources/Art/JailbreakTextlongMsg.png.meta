@@ -16,6 +16,8 @@ TextureImporter:
     21300022: JailbreakTextlongMsg_11
     21300024: JailbreakTextlongMsg_12
     21300026: JailbreakTextlongMsg_13
+    21300028: JailbreakTextlongMsg_14
+    21300030: JailbreakTextlongMsg_15
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -328,7 +330,7 @@ TextureImporter:
         width: 266
         height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -348,7 +350,7 @@ TextureImporter:
         width: 266
         height: 45
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -368,7 +370,7 @@ TextureImporter:
         width: 197
         height: 52
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -388,13 +390,53 @@ TextureImporter:
         width: 197
         height: 52
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 4231ddf7d98a5ec41942c0568059ec4a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailbreakTextlongMsg_14
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 416
+        width: 289
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58cafe29e5e80b64fa18e8143c382336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JailbreakTextlongMsg_15
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 297
+        width: 289
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6aab4c38a3976514ebd07ebfde9f2c73
       vertices: []
       indices: 
       edges: []
